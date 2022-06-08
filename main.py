@@ -10,3 +10,4 @@ auth = tweepy.OAuthHandler(os.environ.get("CONSUMER_KEY"),
 auth.set_access_token(os.environ.get("TOKEN_KEY"),
                       os.environ.get("TOKEN_SECRET"))
 
+# Ajout pour test VIM Fugitive
