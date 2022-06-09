@@ -199,8 +199,57 @@ class Main(QMainWindow):
                                                   radio_value, spin_value)
         second_results = twitter_api.comparison_infos(second_twitter_name,
                                                       radio_value, spin_value)
-        print(first_results)
-        print(second_results)
+
+        #################First person widgets#################
+        #self.firstPersonTitle.setText()
+        self.firstPersonFollowers.setText(f"Number of followers: "
+        f"{first_results[0]} {self.compare_winner(first_results[0], second_results[0])}")
+        self.firstPersonLikes.setText(f"Max of likes: {first_results[1]} "
+                                      f"{self.compare_winner(first_results[1], second_results[1])}")
+        self.firstPersonRetweets.setText(f"Max retweets: {first_results[2]} "
+                                         f"{self.compare_winner(first_results[2], second_results[2])}")
+        self.firstPersonLikesMean.setText(f"Likes mean: {first_results[3]}")
+        self.firstPersonRetweetsMean.setText(f"Retweets mean: "
+                                             f"{first_results[4]}")
+        self.firstPersonEngageLikes.setText(f"Max engagement rate for likes:"
+                                             f" {first_results[5]}%")
+        self.firstPersonEngageRetweets.setText(f"Max engagement rate for"
+                                            f" retweets: {first_results[6]}%")
+        self.firstPersonBestFavTweet.setText(f"Most fav tweet: "
+                                             f"{first_results[7]}")
+        self.firstPersonBestFavTweet.setWordWrap(True)
+        self.firstPersonBestRtTweet.setText(f"Most retweeded tweet: "
+                                            f"{first_results[8]}")
+        self.firstPersonBestRtTweet.setWordWrap(True)
+
+        #################Second person widgets#################
+        #self.secondPersonTitle.setText()
+        self.secondPersonFollowers.setText(f"Number of followers: "
+        f"{second_results[0]}")
+        self.secondPersonLikes.setText(f"Max of likes: {second_results[1]}")
+        self.secondPersonRetweets.setText(f"Max retweets: {second_results[2]}")
+        self.secondPersonLikesMean.setText(f"Likes mean: {second_results[3]}")
+        self.secondPersonRetweetsMean.setText(f"Retweets mean: "
+                                             f"{second_results[4]}")
+        self.secondPersonEngageLikes.setText(f"Max engagement rate for likes:"
+                                             f" {second_results[5]}%")
+        self.secondPersonEngageRetweets.setText(f"Max engagement rate for"
+                                            f" retweets: {second_results[6]}%")
+        self.secondPersonBestFavTweet.setText(f"Most fav tweet: "
+                                             f"{second_results[7]}")
+        self.secondPersonBestFavTweet.setWordWrap(True)
+        self.secondPersonBestRtTweet.setText(f"Most retweeded tweet: "
+                                            f"{second_results[8]}")
+        self.secondPersonBestRtTweet.setWordWrap(True)
+
+    @staticmethod
+    def compare_winner(first, second):
+        if first > second:
+            return "🏆"
+        elif first == second:
+            return "🟰"
+        else:
+            return "🥈"
 
 
 
