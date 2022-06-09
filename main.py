@@ -119,6 +119,7 @@ class Main(QMainWindow):
         self.tweetsSpinBox.setRange(10, 150)
         self.tweetsSpinBox.setSingleStep(10)
         self.submitBtn = QPushButton("🚀 Launch comparison 🚀")
+        self.submitBtn.clicked.connect(self.compare_func)
 
         #################Tab Layouts#################
         self.mainLayout=QHBoxLayout()
@@ -186,10 +187,20 @@ class Main(QMainWindow):
         self.tab1.setLayout(self.mainLayout)
 
 
-    def get_followers_func(self):
-        twitter_name = self.lineTest.text()
-        followers_count = twitter_api.get_followers(twitter_name)
-        self.LabelTest.setText(f"Number of followers: {followers_count}")
+    def compare_func(self):
+        first_twitter_name = self.firstEntry.text()
+        second_twitter_name = self.secondEntry.text()
+        spin_value = self.tweetsSpinBox.value()
+        if self.includeReplies.isChecked():
+            radio_value = False
+        else:
+            radio_value = True
+        first_results = twitter_api.comparison_infos(first_twitter_name,
+                                                  radio_value, spin_value)
+        second_results = twitter_api.comparison_infos(second_twitter_name,
+                                                      radio_value, spin_value)
+        print(first_results)
+        print(second_results)
 
 
 
