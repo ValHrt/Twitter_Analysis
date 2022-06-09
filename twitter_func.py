@@ -15,6 +15,7 @@ class TwitterApiFunc:
         self.api = tweepy.API(self.auth)
 
     def comparison_infos(self, twitter_name: str, replies: bool, nb_tweets: int):
+        # TODO : Récupérer la photo de l'utilisateur / Récupérer son nom
         user = self.api.get_user(screen_name=twitter_name)
         liste_likes = list()
         liste_retweets = list()
