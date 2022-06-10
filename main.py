@@ -56,7 +56,21 @@ class Main(QMainWindow):
         self.tb.addAction(self.getTweets)
         self.tb.addSeparator()
 
+        #################Tweet Bot#################
+        self.botTweet = QAction(QIcon(resource_path('icons/robot.png')), "Tweet Bot",
+                                    self)
+        self.tb.addAction(self.botTweet)
+        self.tb.addSeparator()
+
+        #################Simple Tweet#################
+        self.simpleTweet = QAction(QIcon(resource_path('icons/plume.png')), "Simple Tweet",
+                                    self)
+        self.tb.addAction(self.simpleTweet)
+        self.tb.addSeparator()
+
     def tabWidget(self):
+        # TODO : Créer une tab d'accueil expliquant le fonctionnement des
+        # modules ainsi que la manip pour connecter son compte dev Twitter
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)
         self.tabs.setTabsClosable(True)
