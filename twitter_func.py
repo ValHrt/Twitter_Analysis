@@ -15,7 +15,7 @@ class TwitterApiFunc:
         self.api = tweepy.API(self.auth)
 
     def comparison_infos(self, twitter_name: str, replies: bool, nb_tweets: int):
-        # TODO : Récupérer la photo de l'utilisateur / Récupérer son nom
+        # TODO : gérer les exceptions en cas de mauvais nom d'utilisateur
         user = self.api.get_user(screen_name=twitter_name)
         liste_likes = list()
         liste_retweets = list()
@@ -38,4 +38,4 @@ class TwitterApiFunc:
     int(statistics.mean(liste_likes)), int(statistics.mean(liste_retweets)),\
     round(statistics.mean(liste_likes)/user.followers_count*100, 2),\
     round(statistics.mean(liste_retweets)/user.followers_count*100, 2),\
-    most_fav_tweet, most_rt_tweet
+    most_fav_tweet, most_rt_tweet, user.screen_name, user.profile_image_url

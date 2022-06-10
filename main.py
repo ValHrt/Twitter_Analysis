@@ -2,6 +2,9 @@ import sys, os
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
+from PIL import Image
+import requests
+
 from twitter_func import TwitterApiFunc
 
 
@@ -71,37 +74,59 @@ class Main(QMainWindow):
 
         #################Main Left Layout Widget#################
         self.firstPersonTitle = QLabel("First person")
+        self.firstPersonTitle.setAlignment(Qt.AlignCenter)
         self.firstPersonImg = QLabel()
         self.firstimg = QPixmap(resource_path('icons/man.png'))
         self.firstPersonImg.setPixmap(self.firstimg)
+        self.firstPersonImg.setAlignment(Qt.AlignCenter)
         self.firstPersonFollowers = QLabel("Number of followers: ?")
+        self.firstPersonFollowers.setAlignment(Qt.AlignCenter)
         self.firstPersonLikes = QLabel("Max of likes: ?")
+        self.firstPersonLikes.setAlignment(Qt.AlignCenter)
         self.firstPersonRetweets = QLabel("Max retweets: ?")
+        self.firstPersonRetweets.setAlignment(Qt.AlignCenter)
         self.firstPersonLikesMean = QLabel("Likes mean: ?")
+        self.firstPersonLikesMean.setAlignment(Qt.AlignCenter)
         self.firstPersonRetweetsMean = QLabel("Retweets mean: ?")
+        self.firstPersonRetweetsMean.setAlignment(Qt.AlignCenter)
         self.firstPersonEngageLikes = QLabel("Max engagement rate for likes:"
                                              " ?")
+        self.firstPersonEngageLikes.setAlignment(Qt.AlignCenter)
         self.firstPersonEngageRetweets = QLabel("Max engagement rate for"
                                             " retweets: ?")
+        self.firstPersonEngageRetweets.setAlignment(Qt.AlignCenter)
         self.firstPersonBestFavTweet = QLabel("Most fav tweet: ?")
+        self.firstPersonBestFavTweet.setAlignment(Qt.AlignCenter)
         self.firstPersonBestRtTweet = QLabel("Most retweeded tweet: ?")
+        self.firstPersonBestRtTweet.setAlignment(Qt.AlignCenter)
 
         #################Main Right Layout Widget#################
         self.secondPersonTitle = QLabel("Second person")
+        self.secondPersonTitle.setAlignment(Qt.AlignCenter)
         self.secondPersonImg = QLabel()
         self.secondimg = QPixmap(resource_path('icons/woman.png'))
         self.secondPersonImg.setPixmap(self.secondimg)
+        self.secondPersonImg.setAlignment(Qt.AlignCenter)
         self.secondPersonFollowers = QLabel("Number of followers: ?")
+        self.secondPersonFollowers.setAlignment(Qt.AlignCenter)
         self.secondPersonLikes = QLabel("Max of likes: ?")
+        self.secondPersonLikes.setAlignment(Qt.AlignCenter)
         self.secondPersonRetweets = QLabel("Max retweets: ?")
+        self.secondPersonRetweets.setAlignment(Qt.AlignCenter)
         self.secondPersonLikesMean = QLabel("Likes mean: ?")
+        self.secondPersonLikesMean.setAlignment(Qt.AlignCenter)
         self.secondPersonRetweetsMean = QLabel("Retweets mean: ?")
+        self.secondPersonRetweetsMean.setAlignment(Qt.AlignCenter)
         self.secondPersonEngageLikes = QLabel("Max engagement rate for likes:"
                                              " ?")
+        self.secondPersonEngageLikes.setAlignment(Qt.AlignCenter)
         self.secondPersonEngageRetweets = QLabel("Max engagement rate for"
                                             " retweets: ?")
+        self.secondPersonEngageRetweets.setAlignment(Qt.AlignCenter)
         self.secondPersonBestFavTweet = QLabel("Most fav tweet: ?")
+        self.secondPersonBestFavTweet.setAlignment(Qt.AlignCenter)
         self.secondPersonBestRtTweet = QLabel("Most retweeded tweet: ?")
+        self.secondPersonBestRtTweet.setAlignment(Qt.AlignCenter)
 
         #################Right Top Layout Widget#################
         self.firstText = QLabel("1st: ")
@@ -124,9 +149,7 @@ class Main(QMainWindow):
         #################Tab Layouts#################
         self.mainLayout=QHBoxLayout()
         self.mainLeftLayout = QVBoxLayout()
-        self.mainLeftLayout.setAlignment(Qt.AlignHCenter)
         self.mainRightLayout = QVBoxLayout()
-        self.mainRightLayout.setAlignment(Qt.AlignHCenter)
         self.rightLayout = QVBoxLayout()
         self.rightTopLayout = QHBoxLayout()
         self.rightMiddleLayout = QFormLayout()
@@ -188,6 +211,7 @@ class Main(QMainWindow):
 
 
     def compare_func(self):
+        img_size = (200, 200)
         first_twitter_name = self.firstEntry.text()
         second_twitter_name = self.secondEntry.text()
         spin_value = self.tweetsSpinBox.value()
@@ -201,44 +225,72 @@ class Main(QMainWindow):
                                                       radio_value, spin_value)
 
         #################First person widgets#################
-        #self.firstPersonTitle.setText()
+        self.firstPersonTitle.setText(first_results[9])
+        #################First person image#################
+        # Load img from url without size 48x48 by removing _normal from API
+        first_img_url = f"{first_results[10][:-11]}.jpg"
+        first_img = Image.open(requests.get(first_img_url, stream=True).raw)
+        first_img = first_img.resize(img_size)
+        first_img.save(resource_path(f"img/first_img.jpg"))
+        self.firstimg = QPixmap(resource_path("img/first_img.jpg"))
+        self.firstPersonImg.setPixmap(self.firstimg)
+        #################First person labels#################
         self.firstPersonFollowers.setText(f"Number of followers: "
         f"{first_results[0]} {self.compare_winner(first_results[0], second_results[0])}")
         self.firstPersonLikes.setText(f"Max of likes: {first_results[1]} "
                                       f"{self.compare_winner(first_results[1], second_results[1])}")
         self.firstPersonRetweets.setText(f"Max retweets: {first_results[2]} "
                                          f"{self.compare_winner(first_results[2], second_results[2])}")
-        self.firstPersonLikesMean.setText(f"Likes mean: {first_results[3]}")
+        self.firstPersonLikesMean.setText(f"Likes mean: {first_results[3]} "
+                                          f"{self.compare_winner(first_results[3], second_results[3])}")
         self.firstPersonRetweetsMean.setText(f"Retweets mean: "
-                                             f"{first_results[4]}")
+                                             f"{first_results[4]} "
+                                             f"{self.compare_winner(first_results[4], second_results[4])}")
         self.firstPersonEngageLikes.setText(f"Max engagement rate for likes:"
-                                             f" {first_results[5]}%")
+                                             f" {first_results[5]}% "
+                                            f"{self.compare_winner(first_results[5], second_results[5])}")
         self.firstPersonEngageRetweets.setText(f"Max engagement rate for"
-                                            f" retweets: {first_results[6]}%")
-        self.firstPersonBestFavTweet.setText(f"Most fav tweet: "
+                                            f" retweets: {first_results[6]}% "
+                                               f"{self.compare_winner(first_results[6], second_results[6])}")
+        self.firstPersonBestFavTweet.setText(f"Most fav tweet:\n"
                                              f"{first_results[7]}")
         self.firstPersonBestFavTweet.setWordWrap(True)
-        self.firstPersonBestRtTweet.setText(f"Most retweeded tweet: "
+        self.firstPersonBestRtTweet.setText(f"Most retweeded tweet:\n"
                                             f"{first_results[8]}")
         self.firstPersonBestRtTweet.setWordWrap(True)
 
         #################Second person widgets#################
-        #self.secondPersonTitle.setText()
+        self.secondPersonTitle.setText(second_results[9])
+        #################Second person image#################
+        # Load img from url without size 48x48 by removing _normal from API
+        second_img_url = f"{second_results[10][:-11]}.jpg"
+        second_img = Image.open(requests.get(second_img_url, stream=True).raw)
+        second_img = second_img.resize(img_size)
+        second_img.save(resource_path(f"img/second_img.jpg"))
+        self.secondimg = QPixmap(resource_path("img/second_img.jpg"))
+        self.secondPersonImg.setPixmap(self.secondimg)
+        #################Second person labels#################
         self.secondPersonFollowers.setText(f"Number of followers: "
-        f"{second_results[0]}")
-        self.secondPersonLikes.setText(f"Max of likes: {second_results[1]}")
-        self.secondPersonRetweets.setText(f"Max retweets: {second_results[2]}")
-        self.secondPersonLikesMean.setText(f"Likes mean: {second_results[3]}")
+        f"{second_results[0]} {self.compare_winner(second_results[0], first_results[0])}")
+        self.secondPersonLikes.setText(f"Max of likes: {second_results[1]} "
+                                       f"{self.compare_winner(second_results[1], first_results[1])}")
+        self.secondPersonRetweets.setText(f"Max retweets: {second_results[2]} "
+                                          f"{self.compare_winner(second_results[2], first_results[2])}")
+        self.secondPersonLikesMean.setText(f"Likes mean: {second_results[3]} "
+                                           f"{self.compare_winner(second_results[3], first_results[3])}")
         self.secondPersonRetweetsMean.setText(f"Retweets mean: "
-                                             f"{second_results[4]}")
+                                             f"{second_results[4]} "
+                                              f"{self.compare_winner(second_results[4], first_results[4])}")
         self.secondPersonEngageLikes.setText(f"Max engagement rate for likes:"
-                                             f" {second_results[5]}%")
+                                             f" {second_results[5]}% "
+                                             f"{self.compare_winner(second_results[5], first_results[5])}")
         self.secondPersonEngageRetweets.setText(f"Max engagement rate for"
-                                            f" retweets: {second_results[6]}%")
-        self.secondPersonBestFavTweet.setText(f"Most fav tweet: "
+                                            f" retweets: {second_results[6]}% "
+                                                f"{self.compare_winner(second_results[6], first_results[6])}")
+        self.secondPersonBestFavTweet.setText(f"Most fav tweet:\n"
                                              f"{second_results[7]}")
         self.secondPersonBestFavTweet.setWordWrap(True)
-        self.secondPersonBestRtTweet.setText(f"Most retweeded tweet: "
+        self.secondPersonBestRtTweet.setText(f"Most retweeded tweet:\n"
                                             f"{second_results[8]}")
         self.secondPersonBestRtTweet.setWordWrap(True)
 
