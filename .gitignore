@@ -9,6 +9,9 @@ __pycache__/
 # Swap files VIM
 *.swp
 
+# Image repo
+/img
+
 # Distribution / packaging
 .Python
 build/
