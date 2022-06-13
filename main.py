@@ -77,18 +77,51 @@ class Main(QMainWindow):
         self.tabs.tabCloseRequested.connect(self.tabs.removeTab)
 
     def widgets(self):
-        pass
+        #################Welcome Screen Tab#################
+        self.tabWelcome = QWidget()
+        tab_welc_index = self.tabs.addTab(self.tabWelcome, "Welcome")
+        self.tabs.setTabIcon(tab_welc_index,
+                             QIcon(resource_path('icons/twitter.icns')))
+
+        #################Welcome Screen Widgets#################
+        self.titleWelcLabel = QLabel("Welcome to the Twitter Toolbox Dev App")
+        self.titleWelcLabel.setAlignment(Qt.AlignCenter)
+        self.welcText = QLabel("Select in the list widget below"
+                               " to get information about the selected module.")
+        self.welcText.setAlignment(Qt.AlignCenter)
+        # Ajouter une flèche en image pointant sur la liste déroulante
+        self.welcListWidget = QComboBox()
+        widgets_list = ["Compare", "Get Tweets", "Tweet Bot", "Simple Tweet"]
+        self.welcListWidget.addItems(widgets_list)
+        self.copyrightLabel = QLabel("Copyright Valentin Henriot - DAFB /"
+        " Github: ValHrt\nVersion 1.0")
+        self.copyrightLabel.setAlignment(Qt.AlignCenter)
 
     def layouts(self):
-        pass
+        #################Welcome Screen Layouts#################
+        self.welcMainLayout = QVBoxLayout()
+        self.welcMainLayout.setAlignment(Qt.AlignHCenter)
+
+        self.welcMainLayout.addWidget(self.titleWelcLabel)
+        self.welcMainLayout.addWidget(self.welcText)
+        self.welcMainLayout.addWidget(self.welcListWidget)
+        self.welcMainLayout.addWidget(self.copyrightLabel)
+
+        self.tabWelcome.setLayout(self.welcMainLayout)
 
     def compareStatsWindow(self):
-        self.tab1 = QWidget()
-        self.tabs.addTab(self.tab1, "Compare")
+        self.tabCompare = QWidget()
+        tab_compare_index = self.tabs.addTab(self.tabCompare, "Compare")
+        self.tabs.setTabIcon(tab_compare_index,
+                             QIcon(resource_path('icons/twin.png')))
 
         #################Main Left Layout Widget#################
         self.firstPersonTitle = QLabel("First person")
         self.firstPersonTitle.setAlignment(Qt.AlignCenter)
+
+        # Temporaire, à mettre dans la feuille de style ensuite
+        self.firstPersonTitle.setStyleSheet("font-size: 22pt;font-family: Cochin")
+
         self.firstPersonImg = QLabel()
         self.firstimg = QPixmap(resource_path('icons/man.png'))
         self.firstPersonImg.setPixmap(self.firstimg)
@@ -117,6 +150,9 @@ class Main(QMainWindow):
         #################Main Right Layout Widget#################
         self.secondPersonTitle = QLabel("Second person")
         self.secondPersonTitle.setAlignment(Qt.AlignCenter)
+
+        # Temporaire, à mettre dans la feuille de style ensuite
+        self.secondPersonTitle.setStyleSheet("font-size: 22pt;font-family: Cochin")
         self.secondPersonImg = QLabel()
         self.secondimg = QPixmap(resource_path('icons/woman.png'))
         self.secondPersonImg.setPixmap(self.secondimg)
@@ -221,7 +257,7 @@ class Main(QMainWindow):
         self.rightLayout.addWidget(self.middleGroupBox, 30)
         self.rightLayout.addWidget(self.bottomGroupBox, 50)
         self.mainLayout.addLayout(self.rightLayout, 30)
-        self.tab1.setLayout(self.mainLayout)
+        self.tabCompare.setLayout(self.mainLayout)
 
 
     def compare_func(self):
@@ -241,7 +277,7 @@ class Main(QMainWindow):
                                                           radio_value, spin_value)
 
             #################First person widgets#################
-            self.firstPersonTitle.setText(first_results[9])
+            self.firstPersonTitle.setText(f"@{first_results[9]}")
             #################First person image#################
             if first_results[10] != "?":
                 # Load img from url without size 48x48 by removing _normal from API
@@ -252,8 +288,10 @@ class Main(QMainWindow):
                 self.firstimg = QPixmap(resource_path("img/first_img.jpg"))
                 self.firstPersonImg.setPixmap(self.firstimg)
             else:
-                QMessageBox.information(self, "Info", f"{first_twitter_name} doesn't"
-                " exists on Twitter")
+                QMessageBox.information(self, "Info", f"@{first_twitter_name} "
+                                        f"doesn't exists on Twitter (or has not "
+                                        f"tweeted more than {spin_value} times or "
+                                        f"is in private profile)")
 
             #################First person labels#################
             self.firstPersonFollowers.setText(f"Number of followers: "
@@ -281,7 +319,7 @@ class Main(QMainWindow):
             self.firstPersonBestRtTweet.setWordWrap(True)
 
             #################Second person widgets#################
-            self.secondPersonTitle.setText(second_results[9])
+            self.secondPersonTitle.setText(f"@{second_results[9]}")
             #################Second person image#################
             if second_results[10] != "?":
                 # Load img from url without size 48x48 by removing _normal from API
@@ -292,8 +330,10 @@ class Main(QMainWindow):
                 self.secondimg = QPixmap(resource_path("img/second_img.jpg"))
                 self.secondPersonImg.setPixmap(self.secondimg)
             else:
-                QMessageBox.information(self, "Info", f"{second_twitter_name} doesn't"
-                " exists on Twitter")
+                QMessageBox.information(self, "Info", f"@{second_twitter_name} "
+                                        f"doesn't exists on Twitter (or has not "
+                                        f"tweeted more than {spin_value} times or "
+                                        f"is in private profile)")
 
             #################Second person labels#################
             self.secondPersonFollowers.setText(f"Number of followers: "
