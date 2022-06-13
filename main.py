@@ -6,6 +6,7 @@ from PIL import Image
 import requests
 
 from twitter_func import TwitterApiFunc
+import modules_text
 
 
 twitter_api = TwitterApiFunc()
@@ -86,26 +87,62 @@ class Main(QMainWindow):
         #################Welcome Screen Widgets#################
         self.titleWelcLabel = QLabel("Welcome to the Twitter Toolbox Dev App")
         self.titleWelcLabel.setAlignment(Qt.AlignCenter)
+        # TODO : mettre le style CSS dans le bon fichier
+        self.titleWelcLabel.setStyleSheet("font-size: 45pt;font-family: Cochin")
         self.welcText = QLabel("Select in the list widget below"
                                " to get information about the selected module.")
         self.welcText.setAlignment(Qt.AlignCenter)
+        self.welcimg = QPixmap(resource_path('icons/down-arrow.png'))
+        self.welcImage = QLabel()
+        self.welcImage.setPixmap(self.welcimg)
+        self.welcImage.setAlignment(Qt.AlignCenter)
         # Ajouter une flèche en image pointant sur la liste déroulante
-        self.welcListWidget = QComboBox()
+        self.welcComboWidget = QComboBox()
+        # setEditable set to True to center items in the dropdown menu
+        self.welcComboWidget.setEditable(True)
         widgets_list = ["Compare", "Get Tweets", "Tweet Bot", "Simple Tweet"]
-        self.welcListWidget.addItems(widgets_list)
-        self.copyrightLabel = QLabel("Copyright Valentin Henriot - DAFB /"
-        " Github: ValHrt\nVersion 1.0")
-        self.copyrightLabel.setAlignment(Qt.AlignCenter)
+        self.welcComboWidget.addItems(widgets_list)
+        self.welcComboWidget.currentIndexChanged.connect(self.moduleInfo)
+        # line_edit variable used to center each item in the list
+        line_edit = self.welcComboWidget.lineEdit()
+        line_edit.setAlignment(Qt.AlignCenter)
+        # setReadOnly to turn off the setEditable set to True before
+        line_edit.setReadOnly(True)
+        # self.copyrightLabel = QLabel("Copyright Valentin Henriot - DAFB /"
+        # " Github: ValHrt\nVersion 1.0")
+        # self.copyrightLabel.setAlignment(Qt.AlignCenter)
 
     def layouts(self):
         #################Welcome Screen Layouts#################
         self.welcMainLayout = QVBoxLayout()
         self.welcMainLayout.setAlignment(Qt.AlignHCenter)
+        self.welcMainLayout.setContentsMargins(200, 0, 200, 0)
+        self.horizontalContainer = QHBoxLayout()
+        self.welcLeftSubLayout = QVBoxLayout()
+        self.welcRightSubLayout = QVBoxLayout()
 
+        self.moduleImage = QLabel()
+        self.moduleimg = QPixmap(resource_path('icons/twin.png'))
+        self.moduleimg = self.moduleimg.scaled(300, 300)
+        self.moduleImage.setPixmap(self.moduleimg)
+        self.moduleImage.setAlignment(Qt.AlignCenter)
+        self.moduleLabel = QLabel(modules_text.compare_module)
+        self.moduleLabel.setWordWrap(True)
+        self.moduleLabel.setAlignment(Qt.AlignCenter)
+
+        #################Main Layout Widgets#################
         self.welcMainLayout.addWidget(self.titleWelcLabel)
         self.welcMainLayout.addWidget(self.welcText)
-        self.welcMainLayout.addWidget(self.welcListWidget)
-        self.welcMainLayout.addWidget(self.copyrightLabel)
+        self.welcMainLayout.addWidget(self.welcImage)
+        self.welcMainLayout.addWidget(self.welcComboWidget)
+        # self.welcMainLayout.addWidget(self.copyrightLabel)
+
+        #################Subs Layout Widgets#################
+        self.welcLeftSubLayout.addWidget(self.moduleImage)
+        self.welcRightSubLayout.addWidget(self.moduleLabel)
+        self.horizontalContainer.addLayout(self.welcLeftSubLayout, 50)
+        self.horizontalContainer.addLayout(self.welcRightSubLayout, 50)
+        self.welcMainLayout.addLayout(self.horizontalContainer)
 
         self.tabWelcome.setLayout(self.welcMainLayout)
 
@@ -119,7 +156,7 @@ class Main(QMainWindow):
         self.firstPersonTitle = QLabel("First person")
         self.firstPersonTitle.setAlignment(Qt.AlignCenter)
 
-        # Temporaire, à mettre dans la feuille de style ensuite
+        # TODO: Temporaire, à mettre dans la feuille de style ensuite
         self.firstPersonTitle.setStyleSheet("font-size: 22pt;font-family: Cochin")
 
         self.firstPersonImg = QLabel()
@@ -151,7 +188,7 @@ class Main(QMainWindow):
         self.secondPersonTitle = QLabel("Second person")
         self.secondPersonTitle.setAlignment(Qt.AlignCenter)
 
-        # Temporaire, à mettre dans la feuille de style ensuite
+        # TODO: Temporaire, à mettre dans la feuille de style ensuite
         self.secondPersonTitle.setStyleSheet("font-size: 22pt;font-family: Cochin")
         self.secondPersonImg = QLabel()
         self.secondimg = QPixmap(resource_path('icons/woman.png'))
@@ -259,6 +296,28 @@ class Main(QMainWindow):
         self.mainLayout.addLayout(self.rightLayout, 30)
         self.tabCompare.setLayout(self.mainLayout)
 
+    def moduleInfo(self):
+        module_selected = self.welcComboWidget.currentText()
+        if module_selected == "Compare":
+            self.moduleimg = QPixmap(resource_path('icons/twin.png'))
+            self.moduleimg = self.moduleimg.scaled(300, 300)
+            self.moduleImage.setPixmap(self.moduleimg)
+            self.moduleLabel.setText(modules_text.compare_module)
+        elif module_selected == "Get Tweets":
+            self.moduleimg = QPixmap(resource_path('icons/note.png'))
+            self.moduleimg = self.moduleimg.scaled(300, 300)
+            self.moduleImage.setPixmap(self.moduleimg)
+            self.moduleLabel.setText(modules_text.search_tweets_module)
+        elif module_selected == "Tweet Bot":
+            self.moduleimg = QPixmap(resource_path('icons/robot.png'))
+            self.moduleimg = self.moduleimg.scaled(300, 300)
+            self.moduleImage.setPixmap(self.moduleimg)
+            self.moduleLabel.setText(modules_text.tweet_bot_module)
+        elif module_selected == "Simple Tweet":
+            self.moduleimg = QPixmap(resource_path('icons/plume.png'))
+            self.moduleimg = self.moduleimg.scaled(300, 300)
+            self.moduleImage.setPixmap(self.moduleimg)
+            self.moduleLabel.setText(modules_text.simple_tweet_module)
 
     def compare_func(self):
         img_size = (200, 200)
@@ -279,19 +338,26 @@ class Main(QMainWindow):
             #################First person widgets#################
             self.firstPersonTitle.setText(f"@{first_results[9]}")
             #################First person image#################
-            if first_results[10] != "?":
-                # Load img from url without size 48x48 by removing _normal from API
-                first_img_url = f"{first_results[10][:-11]}.jpg"
-                first_img = Image.open(requests.get(first_img_url, stream=True).raw)
-                first_img = first_img.resize(img_size)
-                first_img.save(resource_path(f"img/first_img.jpg"))
-                self.firstimg = QPixmap(resource_path("img/first_img.jpg"))
-                self.firstPersonImg.setPixmap(self.firstimg)
-            else:
-                QMessageBox.information(self, "Info", f"@{first_twitter_name} "
-                                        f"doesn't exists on Twitter (or has not "
-                                        f"tweeted more than {spin_value} times or "
-                                        f"is in private profile)")
+            try:
+                if first_results[10] != "?":
+                    # Load img from url without size 48x48 by removing _normal from API
+                    first_img_url = f"{first_results[10][:-11]}.jpg"
+                    first_img = Image.open(requests.get(first_img_url, stream=True).raw)
+                    first_img = first_img.resize(img_size)
+                    first_img.save(resource_path(f"img/first_img.jpg"))
+                    self.firstimg = QPixmap(resource_path("img/first_img.jpg"))
+                    self.firstPersonImg.setPixmap(self.firstimg)
+                else:
+                    QMessageBox.information(self, "Info", f"@{first_twitter_name} "
+                                            f"doesn't exists on Twitter (or has not "
+                                            f"tweeted more than {spin_value} times or "
+                                            f"is in private profile)")
+            except Exception as e:
+                print(e)
+                QMessageBox.information(self, "Info", f"Impossible to retrieve"
+                                        f" the photo of @{first_twitter_name}"
+                                        f" because the photo is too old and is not"
+                                        f" retrieved by the Twitter API")
 
             #################First person labels#################
             self.firstPersonFollowers.setText(f"Number of followers: "
@@ -321,19 +387,27 @@ class Main(QMainWindow):
             #################Second person widgets#################
             self.secondPersonTitle.setText(f"@{second_results[9]}")
             #################Second person image#################
-            if second_results[10] != "?":
-                # Load img from url without size 48x48 by removing _normal from API
-                second_img_url = f"{second_results[10][:-11]}.jpg"
-                second_img = Image.open(requests.get(second_img_url, stream=True).raw)
-                second_img = second_img.resize(img_size)
-                second_img.save(resource_path(f"img/second_img.jpg"))
-                self.secondimg = QPixmap(resource_path("img/second_img.jpg"))
-                self.secondPersonImg.setPixmap(self.secondimg)
-            else:
-                QMessageBox.information(self, "Info", f"@{second_twitter_name} "
-                                        f"doesn't exists on Twitter (or has not "
-                                        f"tweeted more than {spin_value} times or "
-                                        f"is in private profile)")
+            try:
+                if second_results[10] != "?":
+                    # Load img from url without size 48x48 by removing _normal from API
+                    second_img_url = f"{second_results[10][:-11]}.jpg"
+                    second_img = Image.open(requests.get(second_img_url, stream=True).raw)
+                    second_img = second_img.resize(img_size)
+                    second_img.save(resource_path(f"img/second_img.jpg"))
+                    self.secondimg = QPixmap(resource_path("img/second_img.jpg"))
+                    self.secondPersonImg.setPixmap(self.secondimg)
+                else:
+                    QMessageBox.information(self, "Info", f"@{second_twitter_name} "
+                                            f"doesn't exists on Twitter (or has not "
+                                            f"tweeted more than {spin_value} times or "
+                                            f"is in private profile)")
+
+            except Exception as e:
+                print(e)
+                QMessageBox.information(self, "Info", f"Impossible to retrieve"
+                                        f" the photo of @{second_twitter_name}"
+                                        f" because the photo is too old and is not"
+                                        f" retrieved by the Twitter API")
 
             #################Second person labels#################
             self.secondPersonFollowers.setText(f"Number of followers: "
