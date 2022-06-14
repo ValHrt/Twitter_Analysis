@@ -14,3 +14,5 @@ search_tweets_module = "To be defined later / Search Tweets Module"
 tweet_bot_module = "To be defined later / Tweet Bot Module"
 
 simple_tweet_module = "To be defined later / Simple Tweet Module"
+
+top_tweets_module = "To be defined later / Top Tweets Module"

@@ -55,6 +55,7 @@ class Main(QMainWindow):
         self.getTweets = QAction(QIcon(resource_path('icons/note.png')), "Get Tweets",
                                     self)
         self.tb.addAction(self.getTweets)
+        self.getTweets.triggered.connect(self.getTweetsWindow)
         self.tb.addSeparator()
 
         #################Tweet Bot#################
@@ -67,6 +68,12 @@ class Main(QMainWindow):
         self.simpleTweet = QAction(QIcon(resource_path('icons/plume.png')), "Simple Tweet",
                                     self)
         self.tb.addAction(self.simpleTweet)
+        self.tb.addSeparator()
+
+        #################Top Tweet#################
+        self.topTweet = QAction(QIcon(resource_path('icons/badge.png')), "Top Tweets",
+                                self)
+        self.tb.addAction(self.topTweet)
         self.tb.addSeparator()
 
     def tabWidget(self):
@@ -100,7 +107,8 @@ class Main(QMainWindow):
         self.welcComboWidget = QComboBox()
         # setEditable set to True to center items in the dropdown menu
         self.welcComboWidget.setEditable(True)
-        widgets_list = ["Compare", "Get Tweets", "Tweet Bot", "Simple Tweet"]
+        widgets_list = ["Compare", "Get Tweets", "Tweet Bot", "Simple Tweet",
+                        "Top Tweets"]
         self.welcComboWidget.addItems(widgets_list)
         self.welcComboWidget.currentIndexChanged.connect(self.moduleInfo)
         # line_edit variable used to center each item in the list
@@ -246,7 +254,7 @@ class Main(QMainWindow):
 
         #################Add Widgets#################
 
-        #################Left Main Layout Widgets#################
+        #################Left Main Layout Setting#################
         self.mainLeftLayout.addWidget(self.firstPersonTitle)
         self.mainLeftLayout.addWidget(self.firstPersonImg)
         self.mainLeftLayout.addWidget(self.firstPersonFollowers)
@@ -259,7 +267,7 @@ class Main(QMainWindow):
         self.mainLeftLayout.addWidget(self.firstPersonBestFavTweet)
         self.mainLeftLayout.addWidget(self.firstPersonBestRtTweet)
 
-        #################Right Main Layout Widgets#################
+        #################Right Main Layout Setting#################
         self.mainRightLayout.addWidget(self.secondPersonTitle)
         self.mainRightLayout.addWidget(self.secondPersonImg)
         self.mainRightLayout.addWidget(self.secondPersonFollowers)
@@ -272,14 +280,14 @@ class Main(QMainWindow):
         self.mainRightLayout.addWidget(self.secondPersonBestFavTweet)
         self.mainRightLayout.addWidget(self.secondPersonBestRtTweet)
 
-        #################Right Top Layout Widget#################
+        #################Right Top Layout Setting#################
         self.rightTopLayout.addWidget(self.firstText)
         self.rightTopLayout.addWidget(self.firstEntry)
         self.rightTopLayout.addWidget(self.secondText)
         self.rightTopLayout.addWidget(self.secondEntry)
         self.topGroupBox.setLayout(self.rightTopLayout)
 
-        #################Right Middle Layout Widget#################
+        #################Right Middle Layout Setting#################
         self.rightMiddleLayout.addRow(self.includeReplies, self.excludeReplies)
         self.rightMiddleLayout.addRow(QLabel(""), QLabel(""))
         self.rightMiddleLayout.addRow(self.tweetsNumber, self.tweetsSpinBox)
@@ -295,6 +303,60 @@ class Main(QMainWindow):
         self.rightLayout.addWidget(self.bottomGroupBox, 50)
         self.mainLayout.addLayout(self.rightLayout, 30)
         self.tabCompare.setLayout(self.mainLayout)
+
+    def getTweetsWindow(self):
+        self.tabGetTweets = QWidget()
+        tab_get_tweets_index = self.tabs.addTab(self.tabGetTweets, "Get Tweets")
+        self.tabs.setTabIcon(tab_get_tweets_index,
+                             QIcon(resource_path('icons/note.png')))
+
+        #################Left Layout Widgets#################
+        self.tableTweets = QTableWidget()
+        self.tableTweets.setColumnCount(5)
+        col_names = ["Name", "Tweet", "Date", "Like", "Retweet"]
+        for i, v in enumerate(col_names):
+            self.tableTweets.setHorizontalHeaderItem(i, QTableWidgetItem(v))
+        self.tableTweets.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        # Align left for Table Widget and auto stretching
+        self.tableTweets.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
+        self.tableTweets.horizontalHeader().setSectionResizeMode(1,
+                                                                 QHeaderView.Stretch)
+
+        #################Right Layout Widgets#################
+        self.keywordLineEdit = QLineEdit()
+        self.keywordLineEdit.setPlaceholderText("Keyword")
+        self.nbSearchLabel = QLabel("Nb of tweets: ")
+        self.getTweetsSpin = QSpinBox()
+        self.getTweetsSpin.setRange(5, 100)
+        self.getTweetsSpin.setSingleStep(5)
+        self.getTweetsBtn = QPushButton("Search")
+        self.getTweetsBtn.clicked.connect(self.get_tweets_func)
+
+        #################Tab Layouts#################
+        self.getTweetsMainLayout = QHBoxLayout()
+        self.getTweetsLeftLayout = QVBoxLayout()
+        self.getTweetsRightLayout = QVBoxLayout()
+        self.getTweetsTopRightLayout = QHBoxLayout()
+        self.getTweetsTopBox = QGroupBox("Keyword Search")
+        self.getTweetsBottomBox = QGroupBox()
+
+        #################Left Layout Setting#################
+        self.getTweetsLeftLayout.addWidget(self.tableTweets)
+
+        #################Right Layout Setting#################
+        self.getTweetsTopRightLayout.addWidget(self.keywordLineEdit)
+        self.getTweetsTopRightLayout.addWidget(self.nbSearchLabel)
+        self.getTweetsTopRightLayout.addWidget(self.getTweetsSpin)
+        self.getTweetsTopRightLayout.addWidget(self.getTweetsBtn)
+        self.getTweetsTopBox.setLayout(self.getTweetsTopRightLayout)
+        self.getTweetsRightLayout.addWidget(self.getTweetsTopBox, 20)
+        self.getTweetsRightLayout.addWidget(self.getTweetsBottomBox, 80)
+
+        #################Set Layouts#################
+        self.getTweetsMainLayout.addLayout(self.getTweetsLeftLayout, 70)
+        self.getTweetsMainLayout.addLayout(self.getTweetsRightLayout, 30)
+        self.tabGetTweets.setLayout(self.getTweetsMainLayout)
 
     def moduleInfo(self):
         module_selected = self.welcComboWidget.currentText()
@@ -318,6 +380,11 @@ class Main(QMainWindow):
             self.moduleimg = self.moduleimg.scaled(300, 300)
             self.moduleImage.setPixmap(self.moduleimg)
             self.moduleLabel.setText(modules_text.simple_tweet_module)
+        elif module_selected == "Top Tweets":
+            self.moduleimg = QPixmap(resource_path('icons/badge.png'))
+            self.moduleimg = self.moduleimg.scaled(300, 300)
+            self.moduleImage.setPixmap(self.moduleimg)
+            self.moduleLabel.setText(modules_text.top_tweets_module)
 
     def compare_func(self):
         img_size = (200, 200)
@@ -437,6 +504,15 @@ class Main(QMainWindow):
         else:
             QMessageBox.information(self, "Info", "Names fields should not be"
             " empty")
+
+    def get_tweets_func(self):
+        keyword = self.keywordLineEdit.text()
+        spin_value = self.getTweetsSpin.value()
+        values = twitter_api.get_tweets(keyword, spin_value)
+        self.tableTweets.setRowCount(spin_value)
+        for i, v in enumerate(values):
+            for idx in range(len(v)):
+                self.tableTweets.setItem(idx, i, QTableWidgetItem(str(v[idx])))
 
     @staticmethod
     def compare_winner(first, second):
