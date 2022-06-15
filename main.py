@@ -339,12 +339,16 @@ class Main(QMainWindow):
         self.getTweetsBtn = QPushButton("Search")
         self.getTweetsBtn.clicked.connect(self.get_tweets_func)
 
-        #################Bottom Widgets#################
+        #################Middle Widgets#################
         self.userLineEdit = QLineEdit()
         self.userLineEdit.setPlaceholderText("elonmusk")
         self.userSelected = QRadioButton("Select User")
         self.noUserSelected = QRadioButton("Global Search")
         self.noUserSelected.setChecked(True)
+
+        #################Bottom Widgets#################
+        self.infoGetTweets = QLabel(modules_text.get_tweets_info)
+        self.infoGetTweets.setWordWrap(True)
 
         #################Tab Layouts#################
         self.getTweetsMainLayout = QHBoxLayout()
@@ -352,9 +356,10 @@ class Main(QMainWindow):
         self.getTweetsRightLayout = QVBoxLayout()
         self.getTweetsTopRightLayout = QHBoxLayout()
         self.getTweetsMiddleRightLayout = QHBoxLayout()
+        self.getTweetsBottomRightLayout = QHBoxLayout()
         self.getTweetsTopBox = QGroupBox("Keyword Search")
         self.getTweetsMiddleBox = QGroupBox("User")
-        self.getTweetsBottomBox = QGroupBox()
+        self.getTweetsBottomBox = QGroupBox("Useful Information")
 
         #################Left Layout Setting#################
         self.getTweetsLeftLayout.addWidget(self.tableTweets)
@@ -377,6 +382,8 @@ class Main(QMainWindow):
         self.getTweetsRightLayout.addWidget(self.getTweetsMiddleBox, 20)
 
         #################Bottom Box Settings#################
+        self.getTweetsBottomRightLayout.addWidget(self.infoGetTweets)
+        self.getTweetsBottomBox.setLayout(self.getTweetsBottomRightLayout)
         self.getTweetsRightLayout.addWidget(self.getTweetsBottomBox, 40)
 
         #################Set Layouts#################
@@ -532,21 +539,28 @@ class Main(QMainWindow):
             " empty")
 
     def get_tweets_func(self):
-        if self.noUserSelected.isChecked():
-            print("Ok")
-        else:
-            print(self.userLineEdit.text())
         keyword = self.keywordLineEdit.text()
         spin_value = self.getTweetsSpin.value()
-        values = twitter_api.get_tweets(keyword, spin_value)
+        if self.noUserSelected.isChecked():
+            values = twitter_api.get_tweets(keyword, spin_value)
+        else:
+            user_name = self.userLineEdit.text()
+            values = twitter_api.get_tweets(keyword, spin_value,
+                                            user_selected=user_name)
         if len(values) == 5:
-            self.tableTweets.setRowCount(len(values[0]))
-            for i, v in enumerate(values):
-                for idx in range(len(v)):
-                    self.tableTweets.setItem(idx, i, QTableWidgetItem(str(v[idx])))
-            self.tableTweets.resizeColumnToContents(2)
-            self.tableTweets.resizeColumnToContents(3)
-            self.tableTweets.resizeColumnToContents(4)
+            if len(values[0]) >= 1:
+                self.tableTweets.setRowCount(len(values[0]))
+                for i, v in enumerate(values):
+                    for idx in range(len(v)):
+                        self.tableTweets.setItem(idx, i, QTableWidgetItem(str(v[idx])))
+                self.tableTweets.resizeColumnToContents(2)
+                self.tableTweets.resizeColumnToContents(3)
+                self.tableTweets.resizeColumnToContents(4)
+            else:
+                QMessageBox.information(self, "Info", "This request doesn't"
+                                        " return any tweet: check the keyword"
+                                        " or the username (if you checked that"
+                                        " option)")
         else:
             QMessageBox.information(self, "Info", values)
 
