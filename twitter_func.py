@@ -50,22 +50,26 @@ class TwitterApiFunc:
 
     def get_tweets(self, keyword, nb_tweets):
         query = f"-filter:retweets {keyword}"
-        tweets = tweepy.Cursor(self.api.search_tweets, q=query,
-                               tweet_mode="extended").items(nb_tweets)
+        try:
+            tweets = tweepy.Cursor(self.api.search_tweets, q=query,
+                                   tweet_mode="extended").items(nb_tweets)
 
-        author_list = []
-        tweet_list = []
-        date_list = []
-        like_list = []
-        retweet_list = []
+            author_list = []
+            tweet_list = []
+            date_list = []
+            like_list = []
+            retweet_list = []
 
-        for tweet in tweets:
-            author_list.append(tweet.user.screen_name)
-            tweet_list.append(tweet.full_text)
-            date_list.append(tweet.created_at)
-            like_list.append(tweet.favorite_count)
-            retweet_list.append(tweet.retweet_count)
+            for tweet in tweets:
+                author_list.append(tweet.user.screen_name)
+                tweet_list.append(tweet.full_text)
+                date_list.append(tweet.created_at)
+                like_list.append(tweet.favorite_count)
+                retweet_list.append(tweet.retweet_count)
 
-        date_list_cleaned = [date.strftime("%d-%m-%Y %H:%M:%S") for date in date_list]
+            date_list_cleaned = [date.strftime("%d-%m-%Y %H:%M:%S") for date in date_list]
 
-        return author_list, tweet_list, date_list_cleaned, like_list, retweet_list
+            return author_list, tweet_list, date_list_cleaned, like_list, retweet_list
+
+        except tweepy.errors.Forbidden:
+            return "Keyword field cannot be empty"
