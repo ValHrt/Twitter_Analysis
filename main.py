@@ -7,6 +7,7 @@ import requests
 
 from twitter_func import TwitterApiFunc
 import modules_text
+import style
 
 
 twitter_api = TwitterApiFunc()
@@ -90,6 +91,8 @@ class Main(QMainWindow):
         tab_welc_index = self.tabs.addTab(self.tabWelcome, "Welcome")
         self.tabs.setTabIcon(tab_welc_index,
                              QIcon(resource_path('icons/twitter.icns')))
+        # Remove close button from welcome tab
+        self.tabs.tabBar().setTabButton(0, QTabBar.RightSide, None)
 
         #################Welcome Screen Widgets#################
         self.titleWelcLabel = QLabel("Welcome to the Twitter Toolbox Dev App")
@@ -159,6 +162,8 @@ class Main(QMainWindow):
         tab_compare_index = self.tabs.addTab(self.tabCompare, "Compare")
         self.tabs.setTabIcon(tab_compare_index,
                              QIcon(resource_path('icons/twin.png')))
+        index = self.tabs.indexOf(self.tabCompare)
+        self.tabs.setCurrentIndex(index)
 
         #################Main Left Layout Widget#################
         self.firstPersonTitle = QLabel("First person")
@@ -233,7 +238,9 @@ class Main(QMainWindow):
 
         #################Right Middle Layout Widget#################
         self.includeReplies = QRadioButton("Include replies")
+        self.includeReplies.setStyleSheet(style.RadioButtonCompare())
         self.excludeReplies = QRadioButton("Exclude replies")
+        self.excludeReplies.setStyleSheet(style.RadioButtonCompare())
         self.excludeReplies.setChecked(True)
         self.tweetsNumber = QLabel("Number of tweets: ")
         self.tweetsSpinBox = QSpinBox()
@@ -250,7 +257,9 @@ class Main(QMainWindow):
         self.rightTopLayout = QHBoxLayout()
         self.rightMiddleLayout = QFormLayout()
         self.topGroupBox = QGroupBox("Twitter names")
+        self.topGroupBox.setStyleSheet(style.BoxStyleTop())
         self.middleGroupBox = QGroupBox("Additional options")
+        self.middleGroupBox.setStyleSheet(style.BoxStyleMiddle())
         self.bottomGroupBox = QGroupBox()
 
         #################Add Widgets#################
@@ -310,6 +319,8 @@ class Main(QMainWindow):
         tab_get_tweets_index = self.tabs.addTab(self.tabGetTweets, "Get Tweets")
         self.tabs.setTabIcon(tab_get_tweets_index,
                              QIcon(resource_path('icons/note.png')))
+        index = self.tabs.indexOf(self.tabGetTweets)
+        self.tabs.setCurrentIndex(index)
 
         #################Left Layout Widgets#################
         self.tableTweets = QTableWidget()
@@ -358,7 +369,9 @@ class Main(QMainWindow):
         self.getTweetsMiddleRightLayout = QHBoxLayout()
         self.getTweetsBottomRightLayout = QHBoxLayout()
         self.getTweetsTopBox = QGroupBox("Keyword Search")
+        self.getTweetsTopBox.setStyleSheet(style.BoxStyleTop())
         self.getTweetsMiddleBox = QGroupBox("User")
+        self.getTweetsMiddleBox.setStyleSheet(style.BoxStyleMiddle())
         self.getTweetsBottomBox = QGroupBox("Useful Information")
 
         #################Left Layout Setting#################

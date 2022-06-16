@@ -11,7 +11,16 @@ compare_module = "This module allows you to compare two Twitter accounts\
  to run the search, especially if you are searching on a large number of\
  tweets."
 
-search_tweets_module = "To be defined later / Search Tweets Module"
+search_tweets_module = "This module allows you to search tweets by keyword, by\
+ user or both.\n\n-There are several search options which are explained in the\
+ bottom right window.\n\n-Issues: It is possible that the search does not\
+ return anything. Make sure you have unchecked the 'Select User' option if you\
+ have not entered a user name (or check that the user name is correct). If\
+ this option is unchecked but the search does not return anything, it means\
+ that no tweet in the last 30 days contains this keyword.\n\n-Information:\
+ The searches for tweets are limited to the last 30 days by the Twitter API.\
+ \n\n-Search on user name only: Enter a user's name without entering any\
+ keywords."
 
 tweet_bot_module = "To be defined later / Tweet Bot Module"
 
