@@ -1,7 +1,7 @@
 def BoxStyleTop():
     return """
         QGroupBox{
-        background-color:#9bc9ff;
+        background-color:#3AB0FF;
         font:20pt Cochin;
         color:white;
         border:2px solid gray;
@@ -12,7 +12,7 @@ def BoxStyleTop():
 def BoxStyleMiddle():
     return """
         QGroupBox{
-        background-color:#fcc324;
+        background-color:#53BF9D;
         font:20pt Cochin;
         color:white;
         border:2px solid gray;
