@@ -6,6 +6,7 @@ from PIL import Image
 import requests
 
 from twitter_func import TwitterApiFunc
+from widgets_window import SimpleTweetWindow
 import modules_text
 import style
 
@@ -69,6 +70,7 @@ class Main(QMainWindow):
         self.simpleTweet = QAction(QIcon(resource_path('icons/plume.png')), "Simple Tweet",
                                     self)
         self.tb.addAction(self.simpleTweet)
+        self.simpleTweet.triggered.connect(self.simple_tweet_func)
         self.tb.addSeparator()
 
         #################Top Tweet#################
@@ -576,6 +578,9 @@ class Main(QMainWindow):
                                         " option)")
         else:
             QMessageBox.information(self, "Info", values)
+
+    def simple_tweet_func(self):
+        self.simple_tweet_window = SimpleTweetWindow(twitter_api)
 
     @staticmethod
     def compare_winner(first, second):

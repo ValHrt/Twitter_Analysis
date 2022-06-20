@@ -17,7 +17,6 @@ class TwitterApiFunc:
         self.api = tweepy.API(self.auth)
 
     def comparison_infos(self, twitter_name: str, replies: bool, nb_tweets: int):
-        # TODO : gérer les exceptions en cas de mauvais nom d'utilisateur
         try:
             user = self.api.get_user(screen_name=twitter_name)
             liste_likes = list()
@@ -77,3 +76,6 @@ class TwitterApiFunc:
 
         except tweepy.errors.Forbidden:
             return "Keyword field cannot be empty"
+
+    def simple_tweet(self):
+        pass
