@@ -77,5 +77,10 @@ class TwitterApiFunc:
         except tweepy.errors.Forbidden:
             return "Keyword field cannot be empty"
 
-    def simple_tweet(self):
-        pass
+    def simple_tweet(self, tweet_text, tweet_image):
+        if tweet_image == "NoImg":
+            self.api.update_status(status=tweet_text)
+        else:
+            media = self.api.media_upload(filename=tweet_image)
+            self.api.update_status(status=tweet_text,
+                                   media_ids=[media.media_id])

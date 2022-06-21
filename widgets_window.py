@@ -18,6 +18,7 @@ class SimpleTweetWindow(QWidget):
     def __init__(self, api_connection):
         super().__init__()
         self.twitter_api = api_connection
+        self.filename = "NoImg"
         self.setWindowTitle("Simple Tweet")
         self.setGeometry(525, 150, 400, 650)
         self.setFixedSize(self.size())
@@ -46,6 +47,8 @@ class SimpleTweetWindow(QWidget):
         self.imageCombo.addItems(["No Image", "Add Image"])
         self.imageCombo.currentIndexChanged.connect(self.generateImgBtn)
         self.selectImg = QPushButton("Select Image")
+        self.selectImg.setHidden(True)
+        self.selectImg.clicked.connect(self.uploadImage)
         self.submitBtn = QPushButton("Post Tweet")
         self.submitBtn.clicked.connect(self.postTweet)
 
@@ -65,6 +68,7 @@ class SimpleTweetWindow(QWidget):
         self.bottomLayout.addRow(QLabel("Tweet: "), self.tweetContent)
         self.bottomLayout.addRow(QLabel(), self.tweetLenghtLabel)
         self.bottomLayout.addRow(QLabel(), self.imageCombo)
+        self.bottomLayout.addRow(QLabel(), self.selectImg)
         self.bottomLayout.addRow(QLabel(), self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -74,8 +78,17 @@ class SimpleTweetWindow(QWidget):
 
     def postTweet(self):
         text = self.tweetContent.toPlainText()
-        print(text)
-        self.tweetContent.clear()
+        if len(text) > 280:
+            QMessageBox.information(self, "Info",
+                                    "Your tweet contains too many characters!")
+        elif len(text) == 0 and self.filename == "NoImg":
+            QMessageBox.information(self, "Info",
+                                    "Your tweet is empty")
+        else:
+            self.twitter_api.simple_tweet(text, self.filename)
+            QMessageBox.information(self, "Info",
+                                    "Your tweet has been posted on Twitter 👍")
+            self.close()
 
     def txtInputChanged(self):
         len_tweet = len(self.tweetContent.toPlainText())
@@ -88,12 +101,15 @@ class SimpleTweetWindow(QWidget):
     def generateImgBtn(self):
         option_selected = self.imageCombo.currentText()
         if option_selected == "No Image":
-            self.bottomLayout.addRow(QLabel(), self.submitBtn)
+            self.selectImg.setHidden(True)
+            self.filename = "NoImg"
         else:
-            self.bottomLayout.addRow(QLabel(), self.selectImg)
-            self.bottomLayout.addRow(QLabel(), self.submitBtn)
+            self.selectImg.setHidden(False)
 
-        self.bottomFrame.setLayout(self.bottomLayout)
-
-        self.mainLayout.addWidget(self.bottomFrame)
-        self.setLayout(self.mainLayout)
+    def uploadImage(self):
+        filename = QFileDialog.getOpenFileName(self, "Upload Image", "",
+                                               "Image Files(*.jpg *.png *.jpeg)")
+        if filename[0] != "":
+            self.filename = filename[0]
+        else:
+            self.filename = "NoImg"
