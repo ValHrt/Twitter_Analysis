@@ -85,10 +85,17 @@ class SimpleTweetWindow(QWidget):
             QMessageBox.information(self, "Info",
                                     "Your tweet is empty")
         else:
-            self.twitter_api.simple_tweet(text, self.filename)
-            QMessageBox.information(self, "Info",
-                                    "Your tweet has been posted on Twitter 👍")
-            self.close()
+            if self.imageCombo.currentText() == "Add Image" and self.filename == "NoImg":
+                mbox = QMessageBox.question(self, "Warning", f"You haven't"
+                                            f" upload an image! Post without"
+                                            f" image?",
+                                    QMessageBox.Yes | QMessageBox.No,
+                                    QMessageBox.No)
+            if mbox == QMessageBox.Yes:
+                self.twitter_api.simple_tweet(text, self.filename)
+                QMessageBox.information(self, "Info",
+                                        "Your tweet has been posted on Twitter 👍")
+                self.close()
 
     def txtInputChanged(self):
         len_tweet = len(self.tweetContent.toPlainText())
