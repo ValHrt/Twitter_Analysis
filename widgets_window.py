@@ -46,6 +46,7 @@ class SimpleTweetWindow(QWidget):
         self.imageCombo = QComboBox()
         self.imageCombo.addItems(["No Image", "Add Image"])
         self.imageCombo.currentIndexChanged.connect(self.generateImgBtn)
+        self.imgLabel = QLabel()
         self.selectImg = QPushButton("Select Image")
         self.selectImg.setHidden(True)
         self.selectImg.clicked.connect(self.uploadImage)
@@ -68,7 +69,7 @@ class SimpleTweetWindow(QWidget):
         self.bottomLayout.addRow(QLabel("Tweet: "), self.tweetContent)
         self.bottomLayout.addRow(QLabel(), self.tweetLenghtLabel)
         self.bottomLayout.addRow(QLabel(), self.imageCombo)
-        self.bottomLayout.addRow(QLabel(), self.selectImg)
+        self.bottomLayout.addRow(self.imgLabel, self.selectImg)
         self.bottomLayout.addRow(QLabel(), self.submitBtn)
         self.bottomFrame.setLayout(self.bottomLayout)
 
@@ -109,6 +110,7 @@ class SimpleTweetWindow(QWidget):
         option_selected = self.imageCombo.currentText()
         if option_selected == "No Image":
             self.selectImg.setHidden(True)
+            self.imgLabel.setText("")
             self.filename = "NoImg"
         else:
             self.selectImg.setHidden(False)
@@ -118,5 +120,6 @@ class SimpleTweetWindow(QWidget):
                                                "Image Files(*.jpg *.png *.jpeg)")
         if filename[0] != "":
             self.filename = filename[0]
+            self.imgLabel.setText(os.path.basename(self.filename))
         else:
             self.filename = "NoImg"
