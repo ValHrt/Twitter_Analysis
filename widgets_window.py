@@ -86,6 +86,7 @@ class SimpleTweetWindow(QWidget):
             QMessageBox.information(self, "Info",
                                     "Your tweet is empty")
         else:
+            mbox = QMessageBox.Yes
             if self.imageCombo.currentText() == "Add Image" and self.filename == "NoImg":
                 mbox = QMessageBox.question(self, "Warning", f"You haven't"
                                             f" upload an image! Post without"
