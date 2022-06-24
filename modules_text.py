@@ -24,7 +24,10 @@ search_tweets_module = "This module allows you to search tweets by keyword, by\
 
 tweet_bot_module = "To be defined later / Tweet Bot Module"
 
-simple_tweet_module = "To be defined later / Simple Tweet Module"
+simple_tweet_module = "This module allow you to tweet from this application.\
+ \n\nIt will open a new window where you can enter your tweet and add an image\
+ if you want it to.\n\nIssues: If your tweet contains more than 280 characters\
+ you wont be able to post your tweet and get an error window."
 
 top_tweets_module = "To be defined later / Top Tweets Module"
 

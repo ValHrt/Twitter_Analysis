@@ -111,7 +111,7 @@ class SimpleTweetWindow(QWidget):
         option_selected = self.imageCombo.currentText()
         if option_selected == "No Image":
             self.selectImg.setHidden(True)
-            self.imgLabel.setText("")
+            self.imgLabel.clear()
             self.filename = "NoImg"
         else:
             self.selectImg.setHidden(False)
@@ -121,6 +121,8 @@ class SimpleTweetWindow(QWidget):
                                                "Image Files(*.jpg *.png *.jpeg)")
         if filename[0] != "":
             self.filename = filename[0]
-            self.imgLabel.setText(os.path.basename(self.filename))
+            self.imgSelected = QPixmap(resource_path(self.filename))
+            self.imgSelected = self.imgSelected.scaled(50, 50)
+            self.imgLabel.setPixmap(self.imgSelected)
         else:
             self.filename = "NoImg"
