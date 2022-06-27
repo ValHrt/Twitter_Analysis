@@ -126,3 +126,106 @@ class SimpleTweetWindow(QWidget):
             self.imgLabel.setPixmap(self.imgSelected)
         else:
             self.filename = "NoImg"
+
+
+class TweetBotWindow(QWidget):
+    def __init__(self, api_connection):
+        super().__init__()
+        self.twitter_api = api_connection
+        self.filename = "NoImg"
+        self.setWindowTitle("Tweet Bot")
+        self.setGeometry(525, 150, 400, 650)
+        self.setFixedSize(self.size())
+        self.UI()
+        self.show()
+
+    def UI(self):
+        self.widgets()
+        self.layouts()
+
+    def widgets(self):
+        #################Top Layout Widgets#################
+        self.titleText = QLabel("Tweet Bot")
+        self.titleText.setAlignment(Qt.AlignCenter)
+        self.tweetBotImg = QLabel()
+        self.img = QPixmap(resource_path('icons/robot.png'))
+        self.img = self.img.scaled(250, 250)
+        self.tweetBotImg.setPixmap(self.img)
+        self.tweetBotImg.setAlignment(Qt.AlignCenter)
+
+        #################Bottom Layout Widgets#################
+        self.comboChoice = QComboBox()
+        choice_list = ["Tweet containing: ", "Tweet finishing by: "]
+        self.comboChoice.addItems(choice_list)
+        self.wordSearched = QLineEdit()
+        self.wordSearched.setPlaceholderText("Enter your word here")
+        self.numberOfTweets = QSpinBox()
+        self.numberOfTweets.setRange(1, 20)
+        self.answerBot = QLineEdit()
+        self.answerBot.setPlaceholderText("Reply to tweets")
+        self.imageCombo = QComboBox()
+        self.imageCombo.addItems(["No Image", "Add Image"])
+        self.imageCombo.currentIndexChanged.connect(self.generateImgBtn)
+        self.imgLabel = QLabel()
+        self.selectImg = QPushButton("Select Image")
+        self.selectImg.setHidden(True)
+        self.selectImg.clicked.connect(self.uploadImage)
+        self.submitBtn = QPushButton("Launch Bot 🤖")
+        self.submitBtn.clicked.connect(self.botTweet)
+
+    def layouts(self):
+        self.mainLayout = QVBoxLayout()
+        self.topLayout = QVBoxLayout()
+        self.bottomLayout = QFormLayout()
+        self.topFrame = QFrame()
+        self.bottomFrame = QFrame()
+
+        #################Top Layout Widgets#################
+        self.topLayout.addWidget(self.titleText)
+        self.topLayout.addWidget(self.tweetBotImg)
+        self.topFrame.setLayout(self.topLayout)
+
+        #################Bottom Layout Widgets#################
+        self.bottomLayout.addRow(QLabel("Options: "), self.comboChoice)
+        self.bottomLayout.addRow(QLabel("Searched word: "), self.wordSearched)
+        self.bottomLayout.addRow(QLabel("Number of tweets: "),
+                                 self.numberOfTweets)
+        self.bottomLayout.addRow(QLabel("Your reply: "), self.answerBot)
+        self.bottomLayout.addRow(QLabel(), self.imageCombo)
+        self.bottomLayout.addRow(QLabel(), self.selectImg)
+        self.bottomLayout.addRow(QLabel(), self.imgLabel)
+        self.bottomLayout.addRow(self.submitBtn)
+        self.bottomFrame.setLayout(self.bottomLayout)
+
+        self.mainLayout.addWidget(self.topFrame)
+        self.mainLayout.addWidget(self.bottomFrame)
+        self.setLayout(self.mainLayout)
+
+    def generateImgBtn(self):
+        option_selected = self.imageCombo.currentText()
+        if option_selected == "No Image":
+            self.selectImg.setHidden(True)
+            self.imgLabel.clear()
+            self.filename = "NoImg"
+        else:
+            self.selectImg.setHidden(False)
+
+    def uploadImage(self):
+        filename = QFileDialog.getOpenFileName(self, "Upload Image", "",
+                                               "Image Files(*.jpg *.png *.jpeg)")
+        if filename[0] != "":
+            self.filename = filename[0]
+            self.imgSelected = QPixmap(resource_path(self.filename))
+            self.imgSelected = self.imgSelected.scaled(50, 50)
+            self.imgLabel.setAlignment(Qt.AlignCenter)
+            self.imgLabel.setPixmap(self.imgSelected)
+        else:
+            self.filename = "NoImg"
+
+    def botTweet(self):
+        word_searched = self.wordSearched.text()
+        reply_text = self.answerBot.text()
+        if word_searched and reply_text != "":
+            self.twitter_api.bot_tweet("Test", word_searched, 1, reply_text, "Test")
+        else:
+            QMessageBox.information(self, "Info", "Fields should not be empty")

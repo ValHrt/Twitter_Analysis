@@ -77,10 +77,29 @@ class TwitterApiFunc:
         except tweepy.errors.Forbidden:
             return "Keyword field cannot be empty"
 
-    def simple_tweet(self, tweet_text, tweet_image):
+    def simple_tweet(self, tweet_text: str, tweet_image: str):
         if tweet_image == "NoImg":
             self.api.update_status(status=tweet_text)
         else:
             media = self.api.media_upload(filename=tweet_image)
             self.api.update_status(status=tweet_text,
                                    media_ids=[media.media_id])
+
+    def bot_tweet(self, option_selected: str, keyword: str, nb_tweets: int,
+                  tweet_text: str, tweet_image: str):
+        query = f"-filter:retweets {keyword}"
+
+        tweets = tweepy.Cursor(self.api.search_tweets, q=query,
+                                   tweet_mode="extended").items(2)
+
+        dict_tweets = {}
+
+        for tweet in tweets:
+            dict_tweets[tweet.id] = tweet.full_text
+
+        print(dict_tweets)
+
+        for key in dict_tweets:
+            self.api.update_status(status=tweet_text,
+                                   in_reply_to_status_id=key,
+                                   auto_populate_reply_metadata=True)

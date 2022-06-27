@@ -6,7 +6,7 @@ from PIL import Image
 import requests
 
 from twitter_func import TwitterApiFunc
-from widgets_window import SimpleTweetWindow
+from widgets_window import SimpleTweetWindow, TweetBotWindow
 import modules_text
 import style
 
@@ -64,6 +64,7 @@ class Main(QMainWindow):
         self.botTweet = QAction(QIcon(resource_path('icons/robot.png')), "Tweet Bot",
                                     self)
         self.tb.addAction(self.botTweet)
+        self.botTweet.triggered.connect(self.tweet_bot_func)
         self.tb.addSeparator()
 
         #################Simple Tweet#################
@@ -581,6 +582,9 @@ class Main(QMainWindow):
 
     def simple_tweet_func(self):
         self.simple_tweet_window = SimpleTweetWindow(twitter_api)
+
+    def tweet_bot_func(self):
+        self.tweet_bot_window = TweetBotWindow(twitter_api)
 
     @staticmethod
     def compare_winner(first, second):
