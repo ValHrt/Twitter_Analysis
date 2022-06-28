@@ -223,9 +223,15 @@ class TweetBotWindow(QWidget):
             self.filename = "NoImg"
 
     def botTweet(self):
+        option = self.comboChoice.currentText()
         word_searched = self.wordSearched.text()
         reply_text = self.answerBot.text()
+        nb_tweets = self.numberOfTweets.value()
         if word_searched and reply_text != "":
-            self.twitter_api.bot_tweet("Test", word_searched, 1, reply_text, "Test")
+            answers_count = self.twitter_api.bot_tweet(option, word_searched,
+                                                       nb_tweets, reply_text,
+                                                       self.filename)
+            QMessageBox.information(self, "Info", f"Bot answered to"
+            f" {answers_count} tweets")
         else:
             QMessageBox.information(self, "Info", "Fields should not be empty")

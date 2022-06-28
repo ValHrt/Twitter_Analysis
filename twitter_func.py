@@ -87,19 +87,46 @@ class TwitterApiFunc:
 
     def bot_tweet(self, option_selected: str, keyword: str, nb_tweets: int,
                   tweet_text: str, tweet_image: str):
+        dict_tweets = {}
         query = f"-filter:retweets {keyword}"
 
-        tweets = tweepy.Cursor(self.api.search_tweets, q=query,
-                                   tweet_mode="extended").items(2)
-
-        dict_tweets = {}
+        if option_selected == "Tweet containing: ":
+            tweets = tweepy.Cursor(self.api.search_tweets, q=query,
+                                       tweet_mode="extended").items(nb_tweets)
+        # Default to 50 to find tweet finishing with the right keyword
+        elif option_selected == "Tweet finishing by: ":
+            tweets = tweepy.Cursor(self.api.search_tweets, q=query,
+                                   tweet_mode="extended").items(50)
 
         for tweet in tweets:
             dict_tweets[tweet.id] = tweet.full_text
 
+        if option_selected == "Tweet finishing by: ":
+            temp_dict = {}
+            # TODO: bug for breaking the for loop
+            count = 0
+            for key in dict_tweets:
+                if dict_tweets[key].endswith(keyword) or\
+                dict_tweets[key].endswith(f"{keyword} ?") or\
+                dict_tweets[key].endswith(f"{keyword} !"):
+                    temp_dict[key] = dict_tweets[key]
+                    if count == nb_tweets:
+                        break
+            dict_tweets = temp_dict
+
         print(dict_tweets)
 
-        for key in dict_tweets:
-            self.api.update_status(status=tweet_text,
-                                   in_reply_to_status_id=key,
-                                   auto_populate_reply_metadata=True)
+        if tweet_image == "NoImg":
+            for key in dict_tweets:
+                self.api.update_status(status=tweet_text,
+                                       in_reply_to_status_id=key,
+                                       auto_populate_reply_metadata=True)
+        else:
+            media = self.api.media_upload(filename=tweet_image)
+            for key in dict_tweets:
+                self.api.update_status(status=tweet_text,
+                                       in_reply_to_status_id=key,
+                                       auto_populate_reply_metadata=True,
+                                       media_ids=[media.media_id])
+
+        return len(dict_tweets)
