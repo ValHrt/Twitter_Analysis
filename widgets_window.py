@@ -231,7 +231,15 @@ class TweetBotWindow(QWidget):
             answers_count = self.twitter_api.bot_tweet(option, word_searched,
                                                        nb_tweets, reply_text,
                                                        self.filename)
-            QMessageBox.information(self, "Info", f"Bot answered to"
-            f" {answers_count} tweets")
+            if answers_count > 2:
+                QMessageBox.information(self, "Info", f"Bot answered to"
+                f" {answers_count} tweets")
+            elif answers_count == 1:
+                QMessageBox.information(self, "Info", f"Bot answered to"
+                f" {answers_count} tweet")
+            else:
+                QMessageBox.information(self, "Info", f"No matching tweet"
+                f" ,please try again!")
+            self.close()
         else:
             QMessageBox.information(self, "Info", "Fields should not be empty")

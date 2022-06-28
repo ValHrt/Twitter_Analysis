@@ -93,25 +93,25 @@ class TwitterApiFunc:
         if option_selected == "Tweet containing: ":
             tweets = tweepy.Cursor(self.api.search_tweets, q=query,
                                        tweet_mode="extended").items(nb_tweets)
-        # Default to 50 to find tweet finishing with the right keyword
+        # Default to 100 to find tweet finishing with the right keyword
         elif option_selected == "Tweet finishing by: ":
             tweets = tweepy.Cursor(self.api.search_tweets, q=query,
-                                   tweet_mode="extended").items(50)
+                                   tweet_mode="extended").items(100)
 
         for tweet in tweets:
             dict_tweets[tweet.id] = tweet.full_text
 
         if option_selected == "Tweet finishing by: ":
             temp_dict = {}
-            # TODO: bug for breaking the for loop
-            count = 0
+            count = -1
             for key in dict_tweets:
+                count += 1
+                if count == nb_tweets:
+                    break
                 if dict_tweets[key].endswith(keyword) or\
                 dict_tweets[key].endswith(f"{keyword} ?") or\
                 dict_tweets[key].endswith(f"{keyword} !"):
                     temp_dict[key] = dict_tweets[key]
-                    if count == nb_tweets:
-                        break
             dict_tweets = temp_dict
 
         print(dict_tweets)
