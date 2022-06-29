@@ -13,6 +13,8 @@ import style
 
 twitter_api = TwitterApiFunc()
 
+# TODO: Créer la possibilité de répondre à un tweet sur l'onglet Get Tweets
+
 
 # For compiling with PyInstaller
 def resource_path(relative_path):
