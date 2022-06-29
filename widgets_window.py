@@ -227,27 +227,32 @@ class TweetBotWindow(QWidget):
         word_searched = self.wordSearched.text()
         reply_text = self.answerBot.text()
         nb_tweets = self.numberOfTweets.value()
-        if word_searched and reply_text != "":
-            mbox = QMessageBox.Yes
-            if self.imageCombo.currentText() == "Add Image" and self.filename == "NoImg":
-                mbox = QMessageBox.question(self, "Warning", f"You haven't"
-                                            f" upload an image! Post without"
-                                            f" image?",
-                                    QMessageBox.Yes | QMessageBox.No,
-                                    QMessageBox.No)
-            if mbox == QMessageBox.Yes:
-                answers_count = self.twitter_api.bot_tweet(option, word_searched,
-                                                           nb_tweets, reply_text,
-                                                           self.filename)
-                if answers_count > 2:
-                    QMessageBox.information(self, "Info", f"Bot answered to"
-                    f" {answers_count} tweets")
-                elif answers_count == 1:
-                    QMessageBox.information(self, "Info", f"Bot answered to"
-                    f" {answers_count} tweet")
-                else:
-                    QMessageBox.information(self, "Info", f"No matching tweet"
-                    f" ,please try again!")
-                self.close()
+        if word_searched != "":
+            if reply_text != "" or self.filename != "NoImg":
+                mbox = QMessageBox.Yes
+                if self.imageCombo.currentText() == "Add Image" and self.filename == "NoImg":
+                    mbox = QMessageBox.question(self, "Warning", f"You haven't"
+                                                f" upload an image! Post without"
+                                                f" image?",
+                                        QMessageBox.Yes | QMessageBox.No,
+                                        QMessageBox.No)
+                if mbox == QMessageBox.Yes:
+                    answers_count = self.twitter_api.bot_tweet(option, word_searched,
+                                                               nb_tweets, reply_text,
+                                                               self.filename)
+                    if answers_count > 1:
+                        QMessageBox.information(self, "Info", f"Bot answered to"
+                        f" {answers_count} tweets")
+                        self.close()
+                    elif answers_count == 1:
+                        QMessageBox.information(self, "Info", f"Bot answered to"
+                        f" {answers_count} tweet")
+                        self.close()
+                    else:
+                        QMessageBox.information(self, "Info", f"No matching tweet"
+                        f", please try again!")
+            else:
+                QMessageBox.information(self, "Info", f"You must insert text or"
+                                        f" select an image")
         else:
             QMessageBox.information(self, "Info", "Fields should not be empty")
