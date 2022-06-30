@@ -8,7 +8,6 @@ from PyQt5.QtWidgets import QMessageBox
 
 class TwitterApiFunc:
     def __init__(self):
-        super().__init__()
         # Authentification to Twitter API 
         self.auth = tweepy.OAuthHandler(os.environ.get("CONSUMER_KEY"),
                            os.environ.get("CONSUMER_SECRET"))
@@ -57,6 +56,7 @@ class TwitterApiFunc:
             tweets = tweepy.Cursor(self.api.search_tweets, q=query,
                                    tweet_mode="extended").items(nb_tweets)
 
+            tweet_id_list = []
             author_list = []
             tweet_list = []
             date_list = []
@@ -64,6 +64,7 @@ class TwitterApiFunc:
             retweet_list = []
 
             for tweet in tweets:
+                tweet_id_list.append(tweet.id)
                 author_list.append(tweet.user.screen_name)
                 tweet_list.append(tweet.full_text)
                 date_list.append(tweet.created_at)
@@ -72,7 +73,7 @@ class TwitterApiFunc:
 
             date_list_cleaned = [date.strftime("%d-%m-%Y %H:%M:%S") for date in date_list]
 
-            return author_list, tweet_list, date_list_cleaned, like_list, retweet_list
+            return tweet_id_list, author_list, tweet_list, date_list_cleaned, like_list, retweet_list
 
         except tweepy.errors.Forbidden:
             return "Keyword field cannot be empty"

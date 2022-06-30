@@ -14,6 +14,30 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
+class ReplyTweetWindow(QWidget):
+    def __init__(self, api_connection, tweet_id, tweet_name, tweet_text):
+        super().__init__()
+        self.twitter_api = api_connection
+        self.tweet_id = tweet_id
+        self.tweet_text = tweet_text
+        self.filename = "NoImg"
+        self.setWindowTitle(f"Reply to @{tweet_name}")
+        self.setGeometry(525, 150, 400, 650)
+        self.setFixedSize(self.size())
+        self.UI()
+        self.show()
+
+    def UI(self):
+        self.widgets()
+        self.layouts()
+
+    def widgets(self):
+        pass
+
+    def layouts(self):
+        pass
+
+
 class SimpleTweetWindow(QWidget):
     def __init__(self, api_connection):
         super().__init__()

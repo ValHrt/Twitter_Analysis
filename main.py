@@ -6,7 +6,7 @@ from PIL import Image
 import requests
 
 from twitter_func import TwitterApiFunc
-from widgets_window import SimpleTweetWindow, TweetBotWindow
+from widgets_window import ReplyTweetWindow, SimpleTweetWindow, TweetBotWindow
 import modules_text
 import style
 
@@ -330,15 +330,18 @@ class Main(QMainWindow):
         #################Left Layout Widgets#################
         self.tableTweets = QTableWidget()
         self.tableTweets.setWordWrap(True)
-        self.tableTweets.setColumnCount(5)
-        col_names = ["Name", "Tweet", "Date", "Like", "Retweet"]
+        self.tableTweets.setColumnCount(6)
+        self.tableTweets.setColumnHidden(0, True)
+        col_names = ["Tweet ID", "Name", "Tweet", "Date", "Like", "Retweet"]
         for i, v in enumerate(col_names):
             self.tableTweets.setHorizontalHeaderItem(i, QTableWidgetItem(v))
         self.tableTweets.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
+        self.tableTweets.doubleClicked.connect(self.reply_tweet_func)
+
         # Align left for Table Widget and auto stretching
         self.tableTweets.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
-        self.tableTweets.horizontalHeader().setSectionResizeMode(1,
+        self.tableTweets.horizontalHeader().setSectionResizeMode(2,
                                                                  QHeaderView.Stretch)
         self.tableTweets.verticalHeader().setDefaultSectionSize(150)
 
@@ -565,15 +568,15 @@ class Main(QMainWindow):
             user_name = self.userLineEdit.text()
             values = twitter_api.get_tweets(keyword, spin_value,
                                             user_selected=user_name)
-        if len(values) == 5:
+        if len(values) == 6:
             if len(values[0]) >= 1:
                 self.tableTweets.setRowCount(len(values[0]))
                 for i, v in enumerate(values):
                     for idx in range(len(v)):
                         self.tableTweets.setItem(idx, i, QTableWidgetItem(str(v[idx])))
-                self.tableTweets.resizeColumnToContents(2)
                 self.tableTweets.resizeColumnToContents(3)
                 self.tableTweets.resizeColumnToContents(4)
+                self.tableTweets.resizeColumnToContents(5)
             else:
                 QMessageBox.information(self, "Info", "This request doesn't"
                                         " return any tweet: check the keyword"
@@ -581,6 +584,14 @@ class Main(QMainWindow):
                                         " option)")
         else:
             QMessageBox.information(self, "Info", values)
+
+    def reply_tweet_func(self):
+        tweet_id = self.tableTweets.item(self.tableTweets.currentRow(), 0).text()
+        tweet_name = self.tableTweets.item(self.tableTweets.currentRow(), 1).text()
+        tweet_text = self.tableTweets.item(self.tableTweets.currentRow(),
+                                           2).text()
+        self.reply_tweet_window = ReplyTweetWindow(twitter_api, tweet_id,
+                                                   tweet_name, tweet_text)
 
     def simple_tweet_func(self):
         self.simple_tweet_window = SimpleTweetWindow(twitter_api)
