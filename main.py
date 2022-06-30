@@ -6,7 +6,7 @@ from PIL import Image
 import requests
 
 from twitter_func import TwitterApiFunc
-from widgets_window import ReplyTweetWindow, SimpleTweetWindow, TweetBotWindow
+from widgets_window import SimpleTweetWindow, TweetBotWindow
 import modules_text
 import style
 
@@ -590,11 +590,11 @@ class Main(QMainWindow):
         tweet_name = self.tableTweets.item(self.tableTweets.currentRow(), 1).text()
         tweet_text = self.tableTweets.item(self.tableTweets.currentRow(),
                                            2).text()
-        self.reply_tweet_window = ReplyTweetWindow(twitter_api, tweet_id,
+        self.reply_tweet_window = SimpleTweetWindow(twitter_api, True, tweet_id,
                                                    tweet_name, tweet_text)
 
     def simple_tweet_func(self):
-        self.simple_tweet_window = SimpleTweetWindow(twitter_api)
+        self.simple_tweet_window = SimpleTweetWindow(twitter_api, False)
 
     def tweet_bot_func(self):
         self.tweet_bot_window = TweetBotWindow(twitter_api)

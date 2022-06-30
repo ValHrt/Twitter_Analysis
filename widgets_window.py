@@ -14,36 +14,19 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-class ReplyTweetWindow(QWidget):
-    def __init__(self, api_connection, tweet_id, tweet_name, tweet_text):
+class SimpleTweetWindow(QWidget):
+    def __init__(self, api_connection, is_reply, tweet_id=None,
+                 tweet_name=None, tweet_text=None):
         super().__init__()
         self.twitter_api = api_connection
+        self.reply = is_reply
         self.tweet_id = tweet_id
         self.tweet_text = tweet_text
         self.filename = "NoImg"
-        self.setWindowTitle(f"Reply to @{tweet_name}")
-        self.setGeometry(525, 150, 400, 650)
-        self.setFixedSize(self.size())
-        self.UI()
-        self.show()
-
-    def UI(self):
-        self.widgets()
-        self.layouts()
-
-    def widgets(self):
-        pass
-
-    def layouts(self):
-        pass
-
-
-class SimpleTweetWindow(QWidget):
-    def __init__(self, api_connection):
-        super().__init__()
-        self.twitter_api = api_connection
-        self.filename = "NoImg"
-        self.setWindowTitle("Simple Tweet")
+        if not self.reply:
+            self.setWindowTitle("Simple Tweet")
+        else:
+            self.setWindowTitle(f"Reply to @{tweet_name}")
         self.setGeometry(525, 150, 400, 650)
         self.setFixedSize(self.size())
         self.UI()
@@ -55,12 +38,18 @@ class SimpleTweetWindow(QWidget):
 
     def widgets(self):
         #################Top Layout Widgets#################
-        self.titleText = QLabel("Simple Tweet")
+        if not self.reply:
+            self.titleText = QLabel("Simple Tweet")
+            self.simpleTweetImg = QLabel()
+            self.img = QPixmap(resource_path('icons/plume.png'))
+            self.img = self.img.scaled(250, 250)
+            self.simpleTweetImg.setPixmap(self.img)
+        else:
+            self.titleText = QLabel("Tweet: ")
+            self.simpleTweetImg = QLabel(self.tweet_text)
+            self.simpleTweetImg.setWordWrap(True)
+
         self.titleText.setAlignment(Qt.AlignCenter)
-        self.simpleTweetImg = QLabel()
-        self.img = QPixmap(resource_path('icons/plume.png'))
-        self.img = self.img.scaled(250, 250)
-        self.simpleTweetImg.setPixmap(self.img)
         self.simpleTweetImg.setAlignment(Qt.AlignCenter)
 
         #################Bottom Layout Widgets#################
