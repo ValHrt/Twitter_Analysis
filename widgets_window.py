@@ -22,6 +22,7 @@ class SimpleTweetWindow(QWidget):
         self.reply = is_reply
         self.tweet_id = tweet_id
         self.tweet_text = tweet_text
+        self.tweet_name = tweet_name
         self.filename = "NoImg"
         if not self.reply:
             self.setWindowTitle("Simple Tweet")
@@ -107,9 +108,15 @@ class SimpleTweetWindow(QWidget):
                                     QMessageBox.Yes | QMessageBox.No,
                                     QMessageBox.No)
             if mbox == QMessageBox.Yes:
-                self.twitter_api.simple_tweet(text, self.filename)
-                QMessageBox.information(self, "Info",
-                                        "Your tweet has been posted on Twitter 👍")
+                if not self.reply:
+                    self.twitter_api.simple_tweet(text, self.filename)
+                    QMessageBox.information(self, "Info",
+                                            "Your tweet has been posted on Twitter 👍")
+                else:
+                    self.twitter_api.reply_tweet(self.tweet_id, text,
+                                                 self.filename)
+                    QMessageBox.information(self, "Info",
+                                            f"You have replied to @{self.tweet_name}")
                 self.close()
 
     def txtInputChanged(self):

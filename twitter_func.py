@@ -86,6 +86,18 @@ class TwitterApiFunc:
             self.api.update_status(status=tweet_text,
                                    media_ids=[media.media_id])
 
+    def reply_tweet(self, tweet_id: str, tweet_text: str, tweet_image: str):
+        if tweet_image == "NoImg":
+            self.api.update_status(status=tweet_text,
+                                   in_reply_to_status_id=tweet_id,
+                                   auto_populate_reply_metadata=True)
+        else:
+            media = self.api.media_upload(filename=tweet_image)
+            self.api.update_status(status=tweet_text,
+                                   in_reply_to_status_id=tweet_id,
+                                   auto_populate_reply_metadata=True,
+                                   media_ids=[media.media_id])
+
     def bot_tweet(self, option_selected: str, keyword: str, nb_tweets: int,
                   tweet_text: str, tweet_image: str):
         dict_tweets = {}
