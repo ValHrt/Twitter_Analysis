@@ -13,8 +13,6 @@ import style
 
 twitter_api = TwitterApiFunc()
 
-# TODO: Créer la possibilité de répondre à un tweet sur l'onglet Get Tweets
-
 
 # For compiling with PyInstaller
 def resource_path(relative_path):
@@ -111,7 +109,6 @@ class Main(QMainWindow):
         self.welcImage = QLabel()
         self.welcImage.setPixmap(self.welcimg)
         self.welcImage.setAlignment(Qt.AlignCenter)
-        # Ajouter une flèche en image pointant sur la liste déroulante
         self.welcComboWidget = QComboBox()
         # setEditable set to True to center items in the dropdown menu
         self.welcComboWidget.setEditable(True)
@@ -124,9 +121,6 @@ class Main(QMainWindow):
         line_edit.setAlignment(Qt.AlignCenter)
         # setReadOnly to turn off the setEditable set to True before
         line_edit.setReadOnly(True)
-        # self.copyrightLabel = QLabel("Copyright Valentin Henriot - DAFB /"
-        # " Github: ValHrt\nVersion 1.0")
-        # self.copyrightLabel.setAlignment(Qt.AlignCenter)
 
     def layouts(self):
         #################Welcome Screen Layouts#################
