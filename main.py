@@ -414,31 +414,18 @@ class Main(QMainWindow):
 
     def moduleInfo(self):
         module_selected = self.welcComboWidget.currentText()
-        if module_selected == "Compare":
-            self.moduleimg = QPixmap(resource_path('icons/twin.png'))
-            self.moduleimg = self.moduleimg.scaled(300, 300)
-            self.moduleImage.setPixmap(self.moduleimg)
-            self.moduleLabel.setText(modules_text.compare_module)
-        elif module_selected == "Get Tweets":
-            self.moduleimg = QPixmap(resource_path('icons/note.png'))
-            self.moduleimg = self.moduleimg.scaled(300, 300)
-            self.moduleImage.setPixmap(self.moduleimg)
-            self.moduleLabel.setText(modules_text.search_tweets_module)
-        elif module_selected == "Tweet Bot":
-            self.moduleimg = QPixmap(resource_path('icons/robot.png'))
-            self.moduleimg = self.moduleimg.scaled(300, 300)
-            self.moduleImage.setPixmap(self.moduleimg)
-            self.moduleLabel.setText(modules_text.tweet_bot_module)
-        elif module_selected == "Simple Tweet":
-            self.moduleimg = QPixmap(resource_path('icons/plume.png'))
-            self.moduleimg = self.moduleimg.scaled(300, 300)
-            self.moduleImage.setPixmap(self.moduleimg)
-            self.moduleLabel.setText(modules_text.simple_tweet_module)
-        elif module_selected == "Top Tweets":
-            self.moduleimg = QPixmap(resource_path('icons/badge.png'))
-            self.moduleimg = self.moduleimg.scaled(300, 300)
-            self.moduleImage.setPixmap(self.moduleimg)
-            self.moduleLabel.setText(modules_text.top_tweets_module)
+        module_dict = {
+            "Compare": ["twin.png", "compare_module"],
+            "Get Tweets": ["note.png", "search_tweets_module"],
+            "Tweet Bot": ["robot.png", "tweet_bot_module"],
+            "Simple Tweet": ["plume.png", "simple_tweet_module"],
+            "Top Tweets": ["badge.png", "top_tweets_module"]
+        }
+        self.moduleimg = QPixmap(resource_path(f'icons/{module_dict[module_selected][0]}'))
+        self.moduleimg = self.moduleimg.scaled(300, 300)
+        self.moduleImage.setPixmap(self.moduleimg)
+        module_txt = eval(f"modules_text.{module_dict[module_selected][1]}")
+        self.moduleLabel.setText(module_txt)
 
     def compare_func(self):
         img_size = (200, 200)
