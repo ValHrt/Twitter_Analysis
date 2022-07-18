@@ -592,9 +592,9 @@ class Main(QMainWindow):
     def authWindow(self):
         if os.path.exists(os.path.join(os.getenv('HOME'), 'twi_auth',
                                        'credentials.csv')):
-            pass
+            self.auth_window = AuthWindow(True)
         else:
-            self.auth_window = AuthWindow()
+            self.auth_window = AuthWindow(False)
 
     @staticmethod
     def compare_winner(first, second):

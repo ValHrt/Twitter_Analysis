@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, csv
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
@@ -279,8 +279,9 @@ class TweetBotWindow(QWidget):
 
 
 class AuthWindow(QWidget):
-    def __init__(self):
+    def __init__(self, existing_directory):
         super().__init__()
+        self.existing_dir = existing_directory
         self.setWindowTitle("Authentification")
         self.setGeometry(325, 250, 800, 400)
         self.setFixedSize(self.size())
@@ -298,6 +299,7 @@ class AuthWindow(QWidget):
         self.tokenSecretEntry = QLineEdit()
         self.testBtn = QPushButton("Connection Test")
         self.saveBtn = QPushButton("Save")
+        self.saveBtn.clicked.connect(self.saveCredentials)
         self.infoTxt = QLabel("You must have a dev account with read and write"
                               " permissions if you want to have access to all"
                               " functionnalities from this app (Tweet Bot,"
@@ -332,3 +334,30 @@ class AuthWindow(QWidget):
         self.mainLayout.addWidget(self.authFrame)
 
         self.setLayout(self.mainLayout)
+
+    def saveCredentials(self):
+        consumer_key = self.consumerKeyEntry.text()
+        consumer_secret = self.consumerSecretEntry.text()
+        token_key = self.tokenKeyEntry.text()
+        token_secret = self.tokenSecretEntry.text()
+        records_list = [consumer_key, consumer_secret, token_key, token_secret]
+        if consumer_key and consumer_secret and token_key and token_secret != "":
+            directory = "twi_auth"
+            home_dir = os.getenv('HOME')
+            path = os.path.join(home_dir, directory)
+
+            if self.existing_dir:
+                file = open(f"{path}/credentials.csv", "w")
+                file.truncate()
+                file.close()
+            else:
+                os.makedirs(path)
+
+            with open(f"{path}/credentials.csv", "w", newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(records_list)
+                f.close()
+            QMessageBox.information(self, "Info", "Credentials saved!")
+            self.close()
+        else:
+            QMessageBox.information(self, "Info", "Fields cannot be empty!")
