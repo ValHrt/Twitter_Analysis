@@ -302,6 +302,7 @@ class AuthWindow(QWidget):
                               " permissions if you want to have access to all"
                               " functionnalities from this app (Tweet Bot,"
                               " Simple Tweet,...)")
+        self.infoTxt.setAlignment(Qt.AlignCenter)
         self.infoTxt.setWordWrap(True)
 
     def layouts(self):

@@ -590,7 +590,11 @@ class Main(QMainWindow):
         self.tweet_bot_window = TweetBotWindow(twitter_api)
 
     def authWindow(self):
-        self.auth_window = AuthWindow()
+        if os.path.exists(os.path.join(os.getenv('HOME'), 'twi_auth',
+                                       'credentials.csv')):
+            pass
+        else:
+            self.auth_window = AuthWindow()
 
     @staticmethod
     def compare_winner(first, second):
