@@ -34,6 +34,8 @@ simple_tweet_module = "This module allow you to tweet from this application.\
 
 top_tweets_module = "To be defined later / Top Tweets Module"
 
+authentification_module = "To be defined later / Authentification Module"
+
 
 # Window Get Tweets text
 

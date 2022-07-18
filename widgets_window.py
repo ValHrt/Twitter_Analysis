@@ -276,3 +276,58 @@ class TweetBotWindow(QWidget):
                                         f" select an image")
         else:
             QMessageBox.information(self, "Info", "Fields should not be empty")
+
+
+class AuthWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Authentification")
+        self.setGeometry(325, 250, 800, 400)
+        self.setFixedSize(self.size())
+        self.UI()
+        self.show()
+
+    def UI(self):
+        self.widgets()
+        self.layouts()
+
+    def widgets(self):
+        self.consumerKeyEntry = QLineEdit()
+        self.consumerSecretEntry = QLineEdit()
+        self.tokenKeyEntry = QLineEdit()
+        self.tokenSecretEntry = QLineEdit()
+        self.testBtn = QPushButton("Connection Test")
+        self.saveBtn = QPushButton("Save")
+        self.infoTxt = QLabel("You must have a dev account with read and write"
+                              " permissions if you want to have access to all"
+                              " functionnalities from this app (Tweet Bot,"
+                              " Simple Tweet,...)")
+        self.infoTxt.setWordWrap(True)
+
+    def layouts(self):
+        self.mainLayout = QVBoxLayout()
+        self.authFormLayout = QFormLayout()
+        self.authFrame = QFrame()
+
+        self.authFormLayout.addRow(QLabel("Consumer Key: "),
+                                   self.consumerKeyEntry)
+        self.authFormLayout.addRow(QLabel(), QLabel())
+        self.authFormLayout.addRow(QLabel("Consumer Secret: "),
+                                   self.consumerSecretEntry)
+        self.authFormLayout.addRow(QLabel(), QLabel())
+        self.authFormLayout.addRow(QLabel("Token Key: "),
+                                   self.tokenKeyEntry)
+        self.authFormLayout.addRow(QLabel(), QLabel())
+        self.authFormLayout.addRow(QLabel("Token Secret: "),
+                                   self.tokenSecretEntry)
+        self.authFormLayout.addRow(QLabel(), QLabel())
+        self.authFormLayout.addRow(QLabel(), self.testBtn)
+        self.authFormLayout.addRow(QLabel(), QLabel())
+        self.authFormLayout.addRow(QLabel(), self.saveBtn)
+        self.authFormLayout.addRow(QLabel(), QLabel())
+        self.authFormLayout.addRow(QLabel("Information: "), self.infoTxt)
+
+        self.authFrame.setLayout(self.authFormLayout)
+        self.mainLayout.addWidget(self.authFrame)
+
+        self.setLayout(self.mainLayout)

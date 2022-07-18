@@ -6,7 +6,7 @@ from PIL import Image
 import requests
 
 from twitter_func import TwitterApiFunc
-from widgets_window import SimpleTweetWindow, TweetBotWindow
+from widgets_window import SimpleTweetWindow, TweetBotWindow, AuthWindow
 import modules_text
 import style
 
@@ -80,6 +80,13 @@ class Main(QMainWindow):
         self.tb.addAction(self.topTweet)
         self.tb.addSeparator()
 
+        #################Authentification#################
+        self.authentification = QAction(QIcon(resource_path('icons/authentification.png')),
+                                        "Authentification", self)
+        self.tb.addAction(self.authentification)
+        self.authentification.triggered.connect(self.authWindow)
+        self.tb.addSeparator()
+
     def tabWidget(self):
         # TODO : Créer une tab d'accueil expliquant le fonctionnement des
         # modules ainsi que la manip pour connecter son compte dev Twitter
@@ -113,7 +120,7 @@ class Main(QMainWindow):
         # setEditable set to True to center items in the dropdown menu
         self.welcComboWidget.setEditable(True)
         widgets_list = ["Compare", "Get Tweets", "Tweet Bot", "Simple Tweet",
-                        "Top Tweets"]
+                        "Top Tweets", "Authentification"]
         self.welcComboWidget.addItems(widgets_list)
         self.welcComboWidget.currentIndexChanged.connect(self.moduleInfo)
         # line_edit variable used to center each item in the list
@@ -413,7 +420,9 @@ class Main(QMainWindow):
             "Get Tweets": ["note.png", "search_tweets_module"],
             "Tweet Bot": ["robot.png", "tweet_bot_module"],
             "Simple Tweet": ["plume.png", "simple_tweet_module"],
-            "Top Tweets": ["badge.png", "top_tweets_module"]
+            "Top Tweets": ["badge.png", "top_tweets_module"],
+            "Authentification": ["authentification.png",
+                                 "authentification_module"]
         }
         self.moduleimg = QPixmap(resource_path(f'icons/{module_dict[module_selected][0]}'))
         self.moduleimg = self.moduleimg.scaled(300, 300)
@@ -579,6 +588,9 @@ class Main(QMainWindow):
 
     def tweet_bot_func(self):
         self.tweet_bot_window = TweetBotWindow(twitter_api)
+
+    def authWindow(self):
+        self.auth_window = AuthWindow()
 
     @staticmethod
     def compare_winner(first, second):
