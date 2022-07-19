@@ -279,9 +279,11 @@ class TweetBotWindow(QWidget):
 
 
 class AuthWindow(QWidget):
-    def __init__(self, existing_directory):
+    def __init__(self, existing_directory: bool, credentials=None):
         super().__init__()
         self.existing_dir = existing_directory
+        if self.existing_dir:
+            self.credentials = credentials
         self.setWindowTitle("Authentification")
         self.setGeometry(325, 250, 800, 400)
         self.setFixedSize(self.size())
@@ -297,6 +299,11 @@ class AuthWindow(QWidget):
         self.consumerSecretEntry = QLineEdit()
         self.tokenKeyEntry = QLineEdit()
         self.tokenSecretEntry = QLineEdit()
+        if self.existing_dir:
+            self.consumerKeyEntry.setText(self.credentials[0])
+            self.consumerSecretEntry.setText(self.credentials[1])
+            self.tokenKeyEntry.setText(self.credentials[2])
+            self.tokenSecretEntry.setText(self.credentials[3])
         self.testBtn = QPushButton("Connection Test")
         self.saveBtn = QPushButton("Save")
         self.saveBtn.clicked.connect(self.saveCredentials)

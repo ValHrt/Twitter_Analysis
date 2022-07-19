@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, csv
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
@@ -592,7 +592,11 @@ class Main(QMainWindow):
     def authWindow(self):
         if os.path.exists(os.path.join(os.getenv('HOME'), 'twi_auth',
                                        'credentials.csv')):
-            self.auth_window = AuthWindow(True)
+            with open(f"{os.getenv('HOME')}/twi_auth/credentials.csv") as f:
+                csv_reader = csv.reader(f)
+                credentials_csv = next(csv_reader)
+                f.close()
+            self.auth_window = AuthWindow(True, credentials_csv)
         else:
             self.auth_window = AuthWindow(False)
 
