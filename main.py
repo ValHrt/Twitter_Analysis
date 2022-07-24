@@ -34,6 +34,13 @@ class Main(QMainWindow):
         self.UI()
         self.show()
 
+        if not os.path.exists(os.path.join(os.getenv('HOME'), 'twi_auth',
+                                       'credentials.csv')):
+            QMessageBox.information(self, "Info", "You need to save your"
+            " twitter dev account credentials to use this application!\n\n"
+            "You will be redirected to the Authentification window.")
+            self.authWindow()
+
     def UI(self):
         self.toolBar()
         self.tabWidget()
