@@ -15,11 +15,20 @@ class TwitterApiFunc:
                 twi_credentials = next(csv_reader)
                 f.close()
 
+        except FileNotFoundError:
+            self.error_msg = "Credentials Missing"
+
+        try:
             self.auth = tweepy.OAuthHandler(twi_credentials[0], twi_credentials[1])
             self.auth.set_access_token(twi_credentials[2], twi_credentials[3])
             self.api = tweepy.API(self.auth)
-        except FileNotFoundError:
-            pass
+            # To raise the error in the init method if credentials provided are
+            # wrong
+            self.api.get_user(screen_name="elonmusk")
+            self.error_msg = "OK"
+
+        except tweepy.errors.Unauthorized:
+            self.error_msg = "Wrong Credentials"
 
     def comparison_infos(self, twitter_name: str, replies: bool, nb_tweets: int):
         try:
