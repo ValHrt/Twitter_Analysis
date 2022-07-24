@@ -1,4 +1,4 @@
-import os
+import os, csv
 import tweepy
 import statistics
 import datetime
@@ -9,11 +9,17 @@ from PyQt5.QtWidgets import QMessageBox
 class TwitterApiFunc:
     def __init__(self):
         # Authentification to Twitter API 
-        self.auth = tweepy.OAuthHandler(os.environ.get("CONSUMER_KEY"),
-                           os.environ.get("CONSUMER_SECRET"))
-        self.auth.set_access_token(os.environ.get("TOKEN_KEY"),
-                      os.environ.get("TOKEN_SECRET"))
-        self.api = tweepy.API(self.auth)
+        try:
+            with open(f"{os.getenv('HOME')}/.twi_auth/credentials.csv") as f:
+                csv_reader = csv.reader(f)
+                twi_credentials = next(csv_reader)
+                f.close()
+
+            self.auth = tweepy.OAuthHandler(twi_credentials[0], twi_credentials[1])
+            self.auth.set_access_token(twi_credentials[2], twi_credentials[3])
+            self.api = tweepy.API(self.auth)
+        except FileNotFoundError:
+            pass
 
     def comparison_infos(self, twitter_name: str, replies: bool, nb_tweets: int):
         try:

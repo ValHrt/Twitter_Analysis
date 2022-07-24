@@ -34,7 +34,7 @@ class Main(QMainWindow):
         self.UI()
         self.show()
 
-        if not os.path.exists(os.path.join(os.getenv('HOME'), 'twi_auth',
+        if not os.path.exists(os.path.join(os.getenv('HOME'), '.twi_auth',
                                        'credentials.csv')):
             QMessageBox.information(self, "Info", "You need to save your"
             " twitter dev account credentials to use this application!\n\n"
@@ -597,9 +597,9 @@ class Main(QMainWindow):
         self.tweet_bot_window = TweetBotWindow(twitter_api)
 
     def authWindow(self):
-        if os.path.exists(os.path.join(os.getenv('HOME'), 'twi_auth',
+        if os.path.exists(os.path.join(os.getenv('HOME'), '.twi_auth',
                                        'credentials.csv')):
-            with open(f"{os.getenv('HOME')}/twi_auth/credentials.csv") as f:
+            with open(f"{os.getenv('HOME')}/.twi_auth/credentials.csv") as f:
                 csv_reader = csv.reader(f)
                 credentials_csv = next(csv_reader)
                 f.close()

@@ -349,7 +349,7 @@ class AuthWindow(QWidget):
         token_secret = self.tokenSecretEntry.text()
         records_list = [consumer_key, consumer_secret, token_key, token_secret]
         if consumer_key and consumer_secret and token_key and token_secret != "":
-            directory = "twi_auth"
+            directory = ".twi_auth"
             home_dir = os.getenv('HOME')
             path = os.path.join(home_dir, directory)
 
