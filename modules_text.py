@@ -34,7 +34,13 @@ simple_tweet_module = "This module allow you to tweet from this application.\
 
 top_tweets_module = "To be defined later / Top Tweets Module"
 
-authentification_module = "To be defined later / Authentification Module"
+authentification_module = "This module is used to save your twitter dev\
+ account credentials.\n\nImportant: You need to have a developer account\
+ with read and write access to use all the functionalities of this application\
+ and avoid crash\nYour credentials are saved in .twi_auth directory inside\
+ your home directory. Please don't remove it or modify it to avoid any issues.\
+ \n\nTo apply to a twitter dev account you need to go on the Twitter Developer\
+ portal: https://developer.twitter.com/en"
 
 
 # Window Get Tweets text
