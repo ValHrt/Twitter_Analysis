@@ -347,7 +347,8 @@ class AuthWindow(QWidget):
         consumer_secret = self.consumerSecretEntry.text()
         token_key = self.tokenKeyEntry.text()
         token_secret = self.tokenSecretEntry.text()
-        records_list = [consumer_key, consumer_secret, token_key, token_secret]
+        records_list = [consumer_key, consumer_secret, token_key, token_secret,
+                        "Not tested"]
         if consumer_key and consumer_secret and token_key and token_secret != "":
             directory = ".twi_auth"
             home_dir = os.getenv('HOME')
