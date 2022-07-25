@@ -15,20 +15,43 @@ class TwitterApiFunc:
                 twi_credentials = next(csv_reader)
                 f.close()
 
+            try:
+                self.auth = tweepy.OAuthHandler(twi_credentials[0], twi_credentials[1])
+                self.auth.set_access_token(twi_credentials[2], twi_credentials[3])
+                self.api = tweepy.API(self.auth)
+                # To raise the error in the init method if credentials provided are
+                # wrong
+                if twi_credentials[4] == "Not tested" or twi_credentials[4] == "Invalid Login":
+                    self.api.get_user(screen_name="elonmusk")
+                    tmp_file = "tmp.csv"
+                    with open(f"{os.getenv('HOME')}/.twi_auth/{tmp_file}", "w") as outFile:
+                        writer = csv.writer(outFile)
+                        twi_credentials = [twi_credentials[0], twi_credentials[1],
+                                           twi_credentials[2], twi_credentials[3],
+                                           "Valid Login"]
+                        writer.writerow(twi_credentials)
+                        os.rename(f"{os.getenv('HOME')}/.twi_auth/{tmp_file}",
+                                  f"{os.getenv('HOME')}/.twi_auth/credentials.csv")
+                        outFile.close()
+
+                self.error_msg = "OK"
+
+            except tweepy.errors.Unauthorized:
+                self.error_msg = "Wrong Credentials"
+                tmp_file = "tmp.csv"
+                with open(f"{os.getenv('HOME')}/.twi_auth/{tmp_file}", "w") as outFile:
+                    writer = csv.writer(outFile)
+                    twi_credentials = [twi_credentials[0], twi_credentials[1],
+                                       twi_credentials[2], twi_credentials[3],
+                                       "Invalid Login"]
+                    writer.writerow(twi_credentials)
+                    os.rename(f"{os.getenv('HOME')}/.twi_auth/{tmp_file}",
+                              f"{os.getenv('HOME')}/.twi_auth/credentials.csv")
+                    outFile.close()
+
         except FileNotFoundError:
             self.error_msg = "Credentials Missing"
 
-        try:
-            self.auth = tweepy.OAuthHandler(twi_credentials[0], twi_credentials[1])
-            self.auth.set_access_token(twi_credentials[2], twi_credentials[3])
-            self.api = tweepy.API(self.auth)
-            # To raise the error in the init method if credentials provided are
-            # wrong
-            self.api.get_user(screen_name="elonmusk")
-            self.error_msg = "OK"
-
-        except tweepy.errors.Unauthorized:
-            self.error_msg = "Wrong Credentials"
 
     def comparison_infos(self, twitter_name: str, replies: bool, nb_tweets: int):
         try:
