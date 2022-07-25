@@ -52,6 +52,16 @@ class TwitterApiFunc:
         except FileNotFoundError:
             self.error_msg = "Credentials Missing"
 
+    def valid_connection(self, con_key: str, con_sec: str, tok_key: str,
+                         tok_sec: str):
+        try:
+            self.auth_test = tweepy.OAuthHandler(con_key, con_sec)
+            self.auth_test.set_access_token(tok_key, tok_sec)
+            self.api_test = tweepy.API(self.auth_test)
+            self.api_test.get_user(screen_name="elonmusk")
+            return True
+        except tweepy.errors.Unauthorized:
+            return False
 
     def comparison_infos(self, twitter_name: str, replies: bool, nb_tweets: int):
         try:

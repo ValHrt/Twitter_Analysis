@@ -605,9 +605,9 @@ class Main(QMainWindow):
                 csv_reader = csv.reader(f)
                 credentials_csv = next(csv_reader)
                 f.close()
-            self.auth_window = AuthWindow(True, credentials_csv)
+            self.auth_window = AuthWindow(True, twitter_api, credentials_csv)
         else:
-            self.auth_window = AuthWindow(False)
+            self.auth_window = AuthWindow(False, twitter_api)
 
     @staticmethod
     def compare_winner(first, second):

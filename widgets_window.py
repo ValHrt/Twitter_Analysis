@@ -279,9 +279,11 @@ class TweetBotWindow(QWidget):
 
 
 class AuthWindow(QWidget):
-    def __init__(self, existing_directory: bool, credentials=None):
+    def __init__(self, existing_directory: bool, api_connection,
+                 credentials=None):
         super().__init__()
         self.existing_dir = existing_directory
+        self.twitter_api = api_connection
         if self.existing_dir:
             self.credentials = credentials
         self.setWindowTitle("Authentification")
@@ -305,6 +307,7 @@ class AuthWindow(QWidget):
             self.tokenKeyEntry.setText(self.credentials[2])
             self.tokenSecretEntry.setText(self.credentials[3])
         self.testBtn = QPushButton("Connection Test")
+        self.testBtn.clicked.connect(self.testCredentials)
         self.saveBtn = QPushButton("Save")
         self.saveBtn.clicked.connect(self.saveCredentials)
         self.infoTxt = QLabel("You must have a dev account with read and write"
@@ -367,5 +370,21 @@ class AuthWindow(QWidget):
                 f.close()
             QMessageBox.information(self, "Info", "Credentials saved!")
             self.close()
+        else:
+            QMessageBox.information(self, "Info", "Fields cannot be empty!")
+
+    def testCredentials(self):
+        consumer_key = self.consumerKeyEntry.text()
+        consumer_secret = self.consumerSecretEntry.text()
+        token_key = self.tokenKeyEntry.text()
+        token_secret = self.tokenSecretEntry.text()
+        if consumer_key and consumer_secret and token_key and token_secret != "":
+            if self.twitter_api.valid_connection(consumer_key, consumer_secret,
+                                                 token_key, token_secret):
+                QMessageBox.information(self, "Info", "You are successfully"
+                " connected ✅")
+            else:
+                QMessageBox.information(self, "Info", "There is an error in your"
+                                        " login information ❌")
         else:
             QMessageBox.information(self, "Info", "Fields cannot be empty!")
