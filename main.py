@@ -79,6 +79,7 @@ class Main(QMainWindow):
         self.topTweet = QAction(QIcon(resource_path('icons/badge.png')), "Top Tweets",
                                 self)
         self.tb.addAction(self.topTweet)
+        self.topTweet.triggered.connect(self.topTweetWindow)
         self.tb.addSeparator()
 
         #################Authentification#################
@@ -413,6 +414,39 @@ class Main(QMainWindow):
         self.getTweetsMainLayout.addLayout(self.getTweetsLeftLayout, 70)
         self.getTweetsMainLayout.addLayout(self.getTweetsRightLayout, 30)
         self.tabGetTweets.setLayout(self.getTweetsMainLayout)
+
+    def topTweetWindow(self):
+        self.tabTopTweet = QWidget()
+        tab_top_tweet_index = self.tabs.addTab(self.tabTopTweet, "Top Tweets")
+        self.tabs.setTabIcon(tab_top_tweet_index,
+                             QIcon(resource_path('icons/badge.png')))
+        index = self.tabs.indexOf(self.tabTopTweet)
+        self.tabs.setCurrentIndex(index)
+
+        #################Left Layout Widgets#################
+        self.tableTopTweet = QTableWidget()
+        self.tableTopTweet.setWordWrap(True)
+        self.tableTopTweet.setColumnCount(3)
+
+        #################Tab Layouts#################
+        self.topTweetMainLayout = QHBoxLayout()
+        self.topTweetLeftLayout = QVBoxLayout()
+        self.topTweetRightLayout = QVBoxLayout()
+        self.topTweetTopRightLayout = QHBoxLayout()
+        self.topTweetMiddleRightLayout = QHBoxLayout()
+        self.topTweetBottomRightLayout = QHBoxLayout()
+        self.topTweetTopBox = QGroupBox("First box")
+        self.topTweetTopBox.setStyleSheet(style.BoxStyleTop())
+        self.topTweetMiddleBox = QGroupBox("Second box")
+        self.topTweetMiddleBox.setStyleSheet(style.BoxStyleMiddle())
+        self.topTweetBottomBox = QGroupBox("Third box")
+
+        #################Left Layout Setting#################
+        self.topTweetLeftLayout.addWidget(self.tableTopTweet)
+
+        #################Set Layouts#################
+        self.topTweetMainLayout.addLayout(self.topTweetLeftLayout, 70)
+        self.tabTopTweet.setLayout(self.topTweetMainLayout)
 
     def moduleInfo(self):
         module_selected = self.welcComboWidget.currentText()
