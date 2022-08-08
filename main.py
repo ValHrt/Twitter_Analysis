@@ -418,9 +418,13 @@ class Main(QMainWindow):
     def topTweetWindow(self):
         twitter_api = self.check_credentials()
         if twitter_api != "Error":
-            self.woeid_list = twitter_api.get_trends_loc()
-            for v in self.woeid_list:
-                print(v["country"], v["name"], v["woeid"])
+            woeid_list = twitter_api.get_trends_loc()
+            woeid_list_tmp = {}
+            for v in woeid_list:
+                #print(v["country"], v["name"], v["woeid"])
+                woeid_list_tmp.setdefault(v["country"], []).append([v["name"], v["woeid"]])
+                #print(woeid_list_tmp)
+            woeid_list_cleaned = dict(sorted(woeid_list_tmp.items()))
         self.tabTopTweet = QWidget()
         tab_top_tweet_index = self.tabs.addTab(self.tabTopTweet, "Top Tweets")
         self.tabs.setTabIcon(tab_top_tweet_index,
@@ -434,7 +438,17 @@ class Main(QMainWindow):
         self.tableTopTweet.setColumnCount(3)
 
         #################Left Layout Widgets#################
-        self.location_menu = QComboBox()
+        self.country_menu = QComboBox()
+        if twitter_api != "Error":
+            country_list = list(woeid_list_cleaned.keys())
+            print(country_list)
+            # TODO: Voir pour enlever du dict la valeur du pays correspondant à
+            # ''
+            self.country_menu.addItems(country_list)
+            self.country_menu.setCurrentIndex(country_list.index("United States"))
+        else:
+            self.country_menu.addItem("Login Error!")
+        self.city_menu = QComboBox()
 
         #################Tab Layouts#################
         self.topTweetMainLayout = QHBoxLayout()
@@ -444,18 +458,22 @@ class Main(QMainWindow):
         self.topTweetMiddleRightLayout = QHBoxLayout()
         self.topTweetBottomRightLayout = QHBoxLayout()
         self.topTweetTopBox = QGroupBox("First box")
-        self.topTweetTopBox.setStyleSheet(style.BoxStyleTop())
+        #self.topTweetTopBox.setStyleSheet(style.BoxStyleTop())
         self.topTweetMiddleBox = QGroupBox("Second box")
-        self.topTweetMiddleBox.setStyleSheet(style.BoxStyleMiddle())
+        #self.topTweetMiddleBox.setStyleSheet(style.BoxStyleMiddle())
         self.topTweetBottomBox = QGroupBox("Third box")
 
         #################Left Layout Setting#################
         self.topTweetLeftLayout.addWidget(self.tableTopTweet)
 
         #################Right Layout Setting#################
+        self.topTweetTopRightLayout.addWidget(self.country_menu)
+        self.topTweetTopBox.setLayout(self.topTweetTopRightLayout)
+        self.topTweetRightLayout.addWidget(self.topTweetTopBox, 20)
 
         #################Set Layouts#################
         self.topTweetMainLayout.addLayout(self.topTweetLeftLayout, 70)
+        self.topTweetMainLayout.addLayout(self.topTweetRightLayout, 30)
         self.tabTopTweet.setLayout(self.topTweetMainLayout)
 
     def moduleInfo(self):
