@@ -191,3 +191,6 @@ class TwitterApiFunc:
                                        media_ids=[media.media_id])
 
         return len(dict_tweets)
+
+    def get_trends_loc(self):
+        return self.api.available_trends()

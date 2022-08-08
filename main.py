@@ -416,6 +416,11 @@ class Main(QMainWindow):
         self.tabGetTweets.setLayout(self.getTweetsMainLayout)
 
     def topTweetWindow(self):
+        twitter_api = self.check_credentials()
+        if twitter_api != "Error":
+            self.woeid_list = twitter_api.get_trends_loc()
+            for v in self.woeid_list:
+                print(v["country"], v["name"], v["woeid"])
         self.tabTopTweet = QWidget()
         tab_top_tweet_index = self.tabs.addTab(self.tabTopTweet, "Top Tweets")
         self.tabs.setTabIcon(tab_top_tweet_index,
@@ -427,6 +432,9 @@ class Main(QMainWindow):
         self.tableTopTweet = QTableWidget()
         self.tableTopTweet.setWordWrap(True)
         self.tableTopTweet.setColumnCount(3)
+
+        #################Left Layout Widgets#################
+        self.location_menu = QComboBox()
 
         #################Tab Layouts#################
         self.topTweetMainLayout = QHBoxLayout()
@@ -443,6 +451,8 @@ class Main(QMainWindow):
 
         #################Left Layout Setting#################
         self.topTweetLeftLayout.addWidget(self.tableTopTweet)
+
+        #################Right Layout Setting#################
 
         #################Set Layouts#################
         self.topTweetMainLayout.addLayout(self.topTweetLeftLayout, 70)
