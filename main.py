@@ -424,7 +424,8 @@ class Main(QMainWindow):
                 #print(v["country"], v["name"], v["woeid"])
                 woeid_list_tmp.setdefault(v["country"], []).append([v["name"], v["woeid"]])
                 #print(woeid_list_tmp)
-            woeid_list_cleaned = dict(sorted(woeid_list_tmp.items()))
+            self.woeid_list_cleaned = dict(sorted(woeid_list_tmp.items()))
+            self.woeid_list_cleaned.pop('')
         self.tabTopTweet = QWidget()
         tab_top_tweet_index = self.tabs.addTab(self.tabTopTweet, "Top Tweets")
         self.tabs.setTabIcon(tab_top_tweet_index,
@@ -437,18 +438,30 @@ class Main(QMainWindow):
         self.tableTopTweet.setWordWrap(True)
         self.tableTopTweet.setColumnCount(3)
 
-        #################Left Layout Widgets#################
+        #################Right Layout Widgets#################
+        #################Right Top Layout Widgets#################
+        self.country_label = QLabel("Country: ")
         self.country_menu = QComboBox()
+        self.city_label = QLabel("City: ")
+        self.city_menu = QComboBox()
         if twitter_api != "Error":
-            country_list = list(woeid_list_cleaned.keys())
-            print(country_list)
-            # TODO: Voir pour enlever du dict la valeur du pays correspondant à
-            # ''
+            country_list = list(self.woeid_list_cleaned.keys())
+            #print(country_list)
             self.country_menu.addItems(country_list)
             self.country_menu.setCurrentIndex(country_list.index("United States"))
+            for v in self.woeid_list_cleaned["United States"]:
+                print(v)
+                self.city_menu.addItem(v[0])
+            self.country_menu.currentIndexChanged.connect(self.updateCityList)
         else:
             self.country_menu.addItem("Login Error!")
-        self.city_menu = QComboBox()
+            self.city_menu.addItem("Login Error!")
+
+        #################Right Middle Layout Widgets#################
+        self.trending_tweets = QRadioButton("Trending Tweets")
+        self.trending_tweets.setChecked(True)
+        self.trending_hashtags = QRadioButton("Trending Hashtags")
+        self.submitBtnTopTweet = QPushButton("Submit")
 
         #################Tab Layouts#################
         self.topTweetMainLayout = QHBoxLayout()
@@ -467,9 +480,18 @@ class Main(QMainWindow):
         self.topTweetLeftLayout.addWidget(self.tableTopTweet)
 
         #################Right Layout Setting#################
+        self.topTweetTopRightLayout.addWidget(self.country_label)
         self.topTweetTopRightLayout.addWidget(self.country_menu)
+        self.topTweetTopRightLayout.addWidget(self.city_label)
+        self.topTweetTopRightLayout.addWidget(self.city_menu)
         self.topTweetTopBox.setLayout(self.topTweetTopRightLayout)
-        self.topTweetRightLayout.addWidget(self.topTweetTopBox, 20)
+        self.topTweetRightLayout.addWidget(self.topTweetTopBox, 30)
+
+        self.topTweetMiddleRightLayout.addWidget(self.trending_tweets)
+        self.topTweetMiddleRightLayout.addWidget(self.trending_hashtags)
+        self.topTweetMiddleRightLayout.addWidget(self.submitBtnTopTweet)
+        self.topTweetMiddleBox.setLayout(self.topTweetMiddleRightLayout)
+        self.topTweetRightLayout.addWidget(self.topTweetMiddleBox, 30)
 
         #################Set Layouts#################
         self.topTweetMainLayout.addLayout(self.topTweetLeftLayout, 70)
@@ -670,6 +692,12 @@ class Main(QMainWindow):
             self.auth_window = AuthWindow(True, twitter_api, credentials_csv)
         else:
             self.auth_window = AuthWindow(False, twitter_api)
+
+    def updateCityList(self):
+        country_selected = self.country_menu.currentText()
+        self.city_menu.clear()
+        for city in self.woeid_list_cleaned[country_selected]:
+            self.city_menu.addItem(city[0])
 
     @staticmethod
     def compare_winner(first, second):
