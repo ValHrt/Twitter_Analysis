@@ -194,3 +194,10 @@ class TwitterApiFunc:
 
     def get_trends_loc(self):
         return self.api.available_trends()
+
+    def get_top_tweets(self, woeid_id: int):
+        trends = self.api.get_place_trends(id=woeid_id)
+        print(trends)
+        for value in trends:
+            for trend in value['trends']:
+                print(trend['name'])

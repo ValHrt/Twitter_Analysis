@@ -450,7 +450,7 @@ class Main(QMainWindow):
             self.country_menu.addItems(country_list)
             self.country_menu.setCurrentIndex(country_list.index("United States"))
             for v in self.woeid_list_cleaned["United States"]:
-                print(v)
+                #print(v)
                 self.city_menu.addItem(v[0])
             self.country_menu.currentIndexChanged.connect(self.updateCityList)
         else:
@@ -462,6 +462,7 @@ class Main(QMainWindow):
         self.trending_tweets.setChecked(True)
         self.trending_hashtags = QRadioButton("Trending Hashtags")
         self.submitBtnTopTweet = QPushButton("Submit")
+        self.submitBtnTopTweet.clicked.connect(self.top_tweet_func)
 
         #################Tab Layouts#################
         self.topTweetMainLayout = QHBoxLayout()
@@ -681,6 +682,15 @@ class Main(QMainWindow):
         twitter_api = self.check_credentials()
         if twitter_api != "Error":
             self.tweet_bot_window = TweetBotWindow(twitter_api)
+
+    def top_tweet_func(self):
+        twitter_api = self.check_credentials()
+        if twitter_api != "Error":
+            city_index = self.city_menu.currentIndex()
+            country_selected = self.country_menu.currentText()
+            woeid = self.woeid_list_cleaned[country_selected][city_index][1]
+            #print(woeid)
+            twitter_api.get_top_tweets(woeid)
 
     def authWindow(self):
         if os.path.exists(os.path.join(os.getenv('HOME'), '.twi_auth',
