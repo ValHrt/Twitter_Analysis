@@ -434,9 +434,10 @@ class Main(QMainWindow):
         self.tabs.setCurrentIndex(index)
 
         #################Left Layout Widgets#################
+        self.table_label = QLabel("Country: City")
         self.tableTopTweet = QTableWidget()
         self.tableTopTweet.setWordWrap(True)
-        self.tableTopTweet.setColumnCount(3)
+        self.tableTopTweet.setColumnCount(2)
 
         #################Right Layout Widgets#################
         #################Right Top Layout Widgets#################
@@ -478,6 +479,7 @@ class Main(QMainWindow):
         self.topTweetBottomBox = QGroupBox("Third box")
 
         #################Left Layout Setting#################
+        self.topTweetLeftLayout.addWidget(self.table_label)
         self.topTweetLeftLayout.addWidget(self.tableTopTweet)
 
         #################Right Layout Setting#################

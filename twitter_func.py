@@ -197,7 +197,13 @@ class TwitterApiFunc:
 
     def get_top_tweets(self, woeid_id: int):
         trends = self.api.get_place_trends(id=woeid_id)
-        print(trends)
+        #print(trends)
+        trends_dict = {}
         for value in trends:
             for trend in value['trends']:
-                print(trend['name'])
+                trends_dict[trend['name']] = trend["tweet_volume"]
+        sorted_trends_dict = dict(sorted(trends_dict.items(), key=lambda item:
+                                         item[1] or 0, reverse=True))
+        print(sorted_trends_dict)
+
+        return sorted_trends_dict
