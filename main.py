@@ -416,6 +416,13 @@ class Main(QMainWindow):
         self.tabGetTweets.setLayout(self.getTweetsMainLayout)
 
     def topTweetWindow(self):
+        self.tabTopTweet = QWidget()
+        tab_top_tweet_index = self.tabs.addTab(self.tabTopTweet, "Top Tweets")
+        self.tabs.setTabIcon(tab_top_tweet_index,
+                             QIcon(resource_path('icons/badge.png')))
+        index = self.tabs.indexOf(self.tabTopTweet)
+        self.tabs.setCurrentIndex(index)
+
         twitter_api = self.check_credentials()
         if twitter_api != "Error":
             woeid_list = twitter_api.get_trends_loc()
@@ -426,12 +433,6 @@ class Main(QMainWindow):
                 #print(woeid_list_tmp)
             self.woeid_list_cleaned = dict(sorted(woeid_list_tmp.items()))
             self.woeid_list_cleaned.pop('')
-        self.tabTopTweet = QWidget()
-        tab_top_tweet_index = self.tabs.addTab(self.tabTopTweet, "Top Tweets")
-        self.tabs.setTabIcon(tab_top_tweet_index,
-                             QIcon(resource_path('icons/badge.png')))
-        index = self.tabs.indexOf(self.tabTopTweet)
-        self.tabs.setCurrentIndex(index)
 
         #################Left Layout Widgets#################
         self.table_label = QLabel("Country: City")
@@ -690,9 +691,24 @@ class Main(QMainWindow):
         if twitter_api != "Error":
             city_index = self.city_menu.currentIndex()
             country_selected = self.country_menu.currentText()
+            city_selected = self.city_menu.currentText()
             woeid = self.woeid_list_cleaned[country_selected][city_index][1]
             #print(woeid)
-            twitter_api.get_top_tweets(woeid)
+            if country_selected != city_selected:
+                self.table_label.setText(f"{country_selected}: {city_selected}")
+            else:
+                self.table_label.setText(country_selected)
+
+            values = twitter_api.get_top_tweets(woeid)
+            self.tableTopTweet.setRowCount(len(values))
+            for row, (key, value) in enumerate(values.items()):
+                for column in range(2):
+                    if column == 0:
+                        self.tableTopTweet.setItem(row, column,
+                                                   QTableWidgetItem(key))
+                    else:
+                        self.tableTopTweet.setItem(row, column,
+                                               QTableWidgetItem(str(value)))
 
     def authWindow(self):
         if os.path.exists(os.path.join(os.getenv('HOME'), '.twi_auth',
