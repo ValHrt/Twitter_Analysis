@@ -436,9 +436,18 @@ class Main(QMainWindow):
 
         #################Left Layout Widgets#################
         self.table_label = QLabel("Country: City")
+        self.table_label.setAlignment(Qt.AlignCenter)
         self.tableTopTweet = QTableWidget()
         self.tableTopTweet.setWordWrap(True)
         self.tableTopTweet.setColumnCount(2)
+        col_names = ["Trend", "Tweet Volume"]
+        for i, v in enumerate(col_names):
+            self.tableTopTweet.setHorizontalHeaderItem(i, QTableWidgetItem(v))
+        self.tableTopTweet.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        # Align left for Table Widget and auto stretching
+        self.tableTopTweet.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
+        self.tableTopTweet.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         #################Right Layout Widgets#################
         #################Right Top Layout Widgets#################
@@ -473,11 +482,11 @@ class Main(QMainWindow):
         self.topTweetTopRightLayout = QHBoxLayout()
         self.topTweetMiddleRightLayout = QHBoxLayout()
         self.topTweetBottomRightLayout = QHBoxLayout()
-        self.topTweetTopBox = QGroupBox("First box")
+        self.topTweetTopBox = QGroupBox("Localisation")
         #self.topTweetTopBox.setStyleSheet(style.BoxStyleTop())
-        self.topTweetMiddleBox = QGroupBox("Second box")
+        self.topTweetMiddleBox = QGroupBox("Trending selection")
         #self.topTweetMiddleBox.setStyleSheet(style.BoxStyleMiddle())
-        self.topTweetBottomBox = QGroupBox("Third box")
+        self.topTweetBottomBox = QGroupBox()
 
         #################Left Layout Setting#################
         self.topTweetLeftLayout.addWidget(self.table_label)
@@ -496,6 +505,8 @@ class Main(QMainWindow):
         self.topTweetMiddleRightLayout.addWidget(self.submitBtnTopTweet)
         self.topTweetMiddleBox.setLayout(self.topTweetMiddleRightLayout)
         self.topTweetRightLayout.addWidget(self.topTweetMiddleBox, 30)
+
+        self.topTweetRightLayout.addWidget(self.topTweetBottomBox, 40)
 
         #################Set Layouts#################
         self.topTweetMainLayout.addLayout(self.topTweetLeftLayout, 70)
@@ -699,7 +710,11 @@ class Main(QMainWindow):
             else:
                 self.table_label.setText(country_selected)
 
-            values = twitter_api.get_top_tweets(woeid)
+            if self.trending_hashtags.isChecked():
+                values = twitter_api.get_top_tweets(woeid, True)
+            else:
+                values = twitter_api.get_top_tweets(woeid, False)
+
             self.tableTopTweet.setRowCount(len(values))
             for row, (key, value) in enumerate(values.items()):
                 for column in range(2):

@@ -195,15 +195,25 @@ class TwitterApiFunc:
     def get_trends_loc(self):
         return self.api.available_trends()
 
-    def get_top_tweets(self, woeid_id: int):
-        trends = self.api.get_place_trends(id=woeid_id)
+    def get_top_tweets(self, woeid_id: int, hashtags: bool):
+        if hashtags:
+            trends = self.api.get_place_trends(id=woeid_id)
+        else:
+            trends = self.api.get_place_trends(id=woeid_id, exclude="hashtags")
         #print(trends)
         trends_dict = {}
-        for value in trends:
-            for trend in value['trends']:
-                trends_dict[trend['name']] = trend["tweet_volume"]
+        if hashtags:
+            for value in trends:
+                for trend in value["trends"]:
+                    if "#" in trend["name"]:
+                        trends_dict[trend["name"]] = trend["tweet_volume"]
+        else:
+            for value in trends:
+                for trend in value['trends']:
+                    trends_dict[trend['name']] = trend["tweet_volume"]
+
         sorted_trends_dict = dict(sorted(trends_dict.items(), key=lambda item:
                                          item[1] or 0, reverse=True))
-        print(sorted_trends_dict)
+        #print(sorted_trends_dict)
 
         return sorted_trends_dict
