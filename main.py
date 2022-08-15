@@ -368,6 +368,12 @@ class Main(QMainWindow):
         self.noUserSelected = QRadioButton("Global Search")
         self.noUserSelected.setChecked(True)
 
+        #################Middle 2 Widgets#################
+        self.searchOptionLabel = QLabel("Search Option")
+        self.searchOptionMenu = QComboBox()
+        options = ["Recent", "Popular"]
+        self.searchOptionMenu.addItems(options)
+
         #################Bottom Widgets#################
         self.infoGetTweets = QLabel(modules_text.get_tweets_info)
         self.infoGetTweets.setWordWrap(True)
@@ -378,11 +384,14 @@ class Main(QMainWindow):
         self.getTweetsRightLayout = QVBoxLayout()
         self.getTweetsTopRightLayout = QHBoxLayout()
         self.getTweetsMiddleRightLayout = QHBoxLayout()
+        self.getTweetsMiddleRightLayout_2 = QHBoxLayout()
         self.getTweetsBottomRightLayout = QHBoxLayout()
         self.getTweetsTopBox = QGroupBox("Keyword Search")
         self.getTweetsTopBox.setStyleSheet(style.BoxStyleTop())
         self.getTweetsMiddleBox = QGroupBox("User")
         self.getTweetsMiddleBox.setStyleSheet(style.BoxStyleMiddle())
+        self.getTweetsMiddleBox_2 = QGroupBox("Options")
+        self.getTweetsMiddleBox_2.setStyleSheet(style.BoxStyleMiddle_2())
         self.getTweetsBottomBox = QGroupBox("Useful Information")
 
         #################Left Layout Setting#################
@@ -404,6 +413,11 @@ class Main(QMainWindow):
         self.getTweetsMiddleRightLayout.addWidget(self.noUserSelected)
         self.getTweetsMiddleBox.setLayout(self.getTweetsMiddleRightLayout)
         self.getTweetsRightLayout.addWidget(self.getTweetsMiddleBox, 20)
+
+        self.getTweetsMiddleRightLayout_2.addWidget(self.searchOptionLabel)
+        self.getTweetsMiddleRightLayout_2.addWidget(self.searchOptionMenu)
+        self.getTweetsMiddleBox_2.setLayout(self.getTweetsMiddleRightLayout_2)
+        self.getTweetsRightLayout.addWidget(self.getTweetsMiddleBox_2, 20)
 
         #################Bottom Box Settings#################
         self.getTweetsBottomRightLayout.addWidget(self.infoGetTweets)
@@ -483,9 +497,9 @@ class Main(QMainWindow):
         self.topTweetMiddleRightLayout = QHBoxLayout()
         self.topTweetBottomRightLayout = QHBoxLayout()
         self.topTweetTopBox = QGroupBox("Localisation")
-        #self.topTweetTopBox.setStyleSheet(style.BoxStyleTop())
+        self.topTweetTopBox.setStyleSheet(style.BoxStyleTop())
         self.topTweetMiddleBox = QGroupBox("Trending selection")
-        #self.topTweetMiddleBox.setStyleSheet(style.BoxStyleMiddle())
+        self.topTweetMiddleBox.setStyleSheet(style.BoxStyleMiddle())
         self.topTweetBottomBox = QGroupBox()
 
         #################Left Layout Setting#################
@@ -656,12 +670,15 @@ class Main(QMainWindow):
         if twitter_api != "Error":
             keyword = self.keywordLineEdit.text()
             spin_value = self.getTweetsSpin.value()
+            search_option = self.searchOptionMenu.currentText()
             if self.noUserSelected.isChecked():
-                values = twitter_api.get_tweets(keyword, spin_value)
+                values = twitter_api.get_tweets(keyword, spin_value,
+                                                search_option)
             else:
                 user_name = self.userLineEdit.text()
-                values = twitter_api.get_tweets(keyword, spin_value,
+                values = twitter_api.get_tweets(keyword, spin_value, search_option,
                                                 user_selected=user_name)
+
             if len(values) == 6:
                 if len(values[0]) >= 1:
                     self.tableTweets.setRowCount(len(values[0]))

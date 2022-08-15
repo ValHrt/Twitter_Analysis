@@ -94,15 +94,20 @@ class TwitterApiFunc:
             return (0, 0, 0, 0, 0, 0, 0, "?", "?", f"{twitter_name} pseudo not"
                     f" found ❌", "?")
 
-    def get_tweets(self, keyword: str, nb_tweets: int, user_selected=None):
+    def get_tweets(self, keyword: str, nb_tweets: int, option_selected: str,
+                   user_selected=None):
         if user_selected is None:
             query = f"-filter:retweets {keyword}"
         else:
             query = f"-filter:retweets {keyword} from:{user_selected}"
 
         try:
-            tweets = tweepy.Cursor(self.api.search_tweets, q=query,
+            if option_selected == "Recent":
+                tweets = tweepy.Cursor(self.api.search_tweets, q=query,
                                    tweet_mode="extended").items(nb_tweets)
+            else:
+                tweets = tweepy.Cursor(self.api.search_tweets, q=query,
+                                   tweet_mode="extended", result_type="popular").items(nb_tweets)
 
             tweet_id_list = []
             author_list = []
