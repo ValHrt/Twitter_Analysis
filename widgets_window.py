@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 
+import style
+
 
 # For compiling with PyInstaller
 def resource_path(relative_path):
@@ -65,6 +67,7 @@ class SimpleTweetWindow(QWidget):
         self.selectImg.setHidden(True)
         self.selectImg.clicked.connect(self.uploadImage)
         self.submitBtn = QPushButton("Post Tweet")
+        self.submitBtn.setStyleSheet(style.SubmitButton())
         self.submitBtn.clicked.connect(self.postTweet)
 
     def layouts(self):
@@ -191,6 +194,7 @@ class TweetBotWindow(QWidget):
         self.selectImg.setHidden(True)
         self.selectImg.clicked.connect(self.uploadImage)
         self.submitBtn = QPushButton("Launch Bot 🤖")
+        self.submitBtn.setStyleSheet(style.SubmitButton())
         self.submitBtn.clicked.connect(self.botTweet)
 
     def layouts(self):

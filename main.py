@@ -255,6 +255,7 @@ class Main(QMainWindow):
         self.tweetsSpinBox.setRange(10, 150)
         self.tweetsSpinBox.setSingleStep(10)
         self.submitBtn = QPushButton("🚀 Launch comparison 🚀")
+        self.submitBtn.setStyleSheet(style.SubmitButton())
         self.submitBtn.clicked.connect(self.compare_func)
 
         #################Tab Layouts#################
@@ -370,6 +371,7 @@ class Main(QMainWindow):
         self.getTweetsSpin.setSingleStep(5)
         self.getTweetsSpin.setValue(10)
         self.getTweetsBtn = QPushButton("Search")
+        self.getTweetsBtn.setStyleSheet(style.SearchButton())
         self.getTweetsBtn.clicked.connect(self.get_tweets_func)
 
         #################Middle Widgets#################
@@ -390,6 +392,7 @@ class Main(QMainWindow):
         #################Bottom Widgets#################
         self.infoGetTweets = QLabel(modules_text.get_tweets_info)
         self.infoGetTweets.setWordWrap(True)
+        self.infoGetTweets.setStyleSheet(style.InfosLabelGetTweet())
 
         #################Tab Layouts#################
         self.getTweetsMainLayout = QHBoxLayout()
@@ -406,6 +409,7 @@ class Main(QMainWindow):
         self.getTweetsMiddleBox_2 = QGroupBox("Options")
         self.getTweetsMiddleBox_2.setStyleSheet(style.BoxStyleMiddle_2())
         self.getTweetsBottomBox = QGroupBox("Useful Information")
+        self.getTweetsBottomBox.setStyleSheet(style.BoxStyleBottom())
 
         #################Left Layout Setting#################
         self.getTweetsLeftLayout.addWidget(self.tableTweets)
@@ -504,6 +508,7 @@ class Main(QMainWindow):
         self.trending_tweets.setChecked(True)
         self.trending_hashtags = QRadioButton("Trending Hashtags")
         self.submitBtnTopTweet = QPushButton("Submit")
+        self.submitBtnTopTweet.setStyleSheet(style.SubmitButton())
         self.submitBtnTopTweet.clicked.connect(self.top_tweet_func)
 
         #################Tab Layouts#################

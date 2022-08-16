@@ -31,6 +31,67 @@ def BoxStyleMiddle_2():
         }
     """
 
+def BoxStyleBottom():
+    return """
+        QGroupBox{
+        font:20pt Cochin;
+        color:white;
+        border:2px solid gray;
+        border-radius:15px;
+        }
+    """
+
+def SearchButton():
+    return """
+        QPushButton{
+        margin: 10px;
+        font-size: 15px;
+        padding: 5px;
+        background: #2155CD;
+        color: #fff;
+        outline: none;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        }
+        QPushButton:hover{
+        background: #001D6E;
+        color: #fff;
+        }
+        QPushButton:pressed{
+        background: #112B3C;
+        color: #fff;
+        }
+    """
+
+def SubmitButton():
+    return """
+        QPushButton{
+        margin: 10px;
+        font-size: 15px;
+        padding: 5px;
+        background: #005555;
+        color: #fff;
+        outline: none;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        }
+        QPushButton:hover{
+        background: #1A3C40;
+        color: #fff;
+        }
+        QPushButton:pressed{
+        background: #1D5C63;
+        color: #fff;
+        }
+    """
+
+def InfosLabelGetTweet():
+    return """
+        QLabel{
+        padding-top:1em;
+        }
+    """
+
 def RadioButtonCompare():
     return """
         QRadioButton{
