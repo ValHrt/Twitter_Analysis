@@ -322,11 +322,19 @@ class Main(QMainWindow):
         self.mainLayout.addLayout(self.rightLayout, 30)
         self.tabCompare.setLayout(self.mainLayout)
 
-    def getTweetsWindow(self):
+    def getTweetsWindow(self, top_tweet_keyword=None):
+        """Get Tweet Window. Parameter top_tweet_keyword is used to retrieve the
+        keyword passed from topTweetWindow when a user double click on a trend
+        to get the top 10 tweets related to this keyword."""
         self.tabGetTweets = QWidget()
-        tab_get_tweets_index = self.tabs.addTab(self.tabGetTweets, "Get Tweets")
-        self.tabs.setTabIcon(tab_get_tweets_index,
-                             QIcon(resource_path('icons/note.png')))
+        if not top_tweet_keyword:
+            tab_get_tweets_index = self.tabs.addTab(self.tabGetTweets, "Get Tweets")
+            self.tabs.setTabIcon(tab_get_tweets_index,
+                                 QIcon(resource_path('icons/note.png')))
+        else:
+            tab_get_tweets_index = self.tabs.addTab(self.tabGetTweets, "Top 10 Tweets")
+            self.tabs.setTabIcon(tab_get_tweets_index,
+                                 QIcon(resource_path('icons/trophy.png')))
         index = self.tabs.indexOf(self.tabGetTweets)
         self.tabs.setCurrentIndex(index)
 
@@ -354,10 +362,13 @@ class Main(QMainWindow):
         #################Top Widgets#################
         self.keywordLineEdit = QLineEdit()
         self.keywordLineEdit.setPlaceholderText("Keyword")
+        if top_tweet_keyword:
+            self.keywordLineEdit.setText(top_tweet_keyword)
         self.nbSearchLabel = QLabel("Nb of tweets: ")
         self.getTweetsSpin = QSpinBox()
         self.getTweetsSpin.setRange(5, 100)
         self.getTweetsSpin.setSingleStep(5)
+        self.getTweetsSpin.setValue(10)
         self.getTweetsBtn = QPushButton("Search")
         self.getTweetsBtn.clicked.connect(self.get_tweets_func)
 
@@ -373,6 +384,8 @@ class Main(QMainWindow):
         self.searchOptionMenu = QComboBox()
         options = ["Recent", "Popular"]
         self.searchOptionMenu.addItems(options)
+        if top_tweet_keyword:
+            self.searchOptionMenu.setCurrentIndex(1)
 
         #################Bottom Widgets#################
         self.infoGetTweets = QLabel(modules_text.get_tweets_info)
@@ -398,35 +411,37 @@ class Main(QMainWindow):
         self.getTweetsLeftLayout.addWidget(self.tableTweets)
 
         #################Right Layout Setting#################
+        if not top_tweet_keyword:
 
-        #################Top Box Settings#################
-        self.getTweetsTopRightLayout.addWidget(self.keywordLineEdit)
-        self.getTweetsTopRightLayout.addWidget(self.nbSearchLabel)
-        self.getTweetsTopRightLayout.addWidget(self.getTweetsSpin)
-        self.getTweetsTopRightLayout.addWidget(self.getTweetsBtn)
-        self.getTweetsTopBox.setLayout(self.getTweetsTopRightLayout)
-        self.getTweetsRightLayout.addWidget(self.getTweetsTopBox, 20)
+            #################Top Box Settings#################
+            self.getTweetsTopRightLayout.addWidget(self.keywordLineEdit)
+            self.getTweetsTopRightLayout.addWidget(self.nbSearchLabel)
+            self.getTweetsTopRightLayout.addWidget(self.getTweetsSpin)
+            self.getTweetsTopRightLayout.addWidget(self.getTweetsBtn)
+            self.getTweetsTopBox.setLayout(self.getTweetsTopRightLayout)
+            self.getTweetsRightLayout.addWidget(self.getTweetsTopBox, 20)
 
-        #################Middle Box Settings#################
-        self.getTweetsMiddleRightLayout.addWidget(self.userLineEdit)
-        self.getTweetsMiddleRightLayout.addWidget(self.userSelected)
-        self.getTweetsMiddleRightLayout.addWidget(self.noUserSelected)
-        self.getTweetsMiddleBox.setLayout(self.getTweetsMiddleRightLayout)
-        self.getTweetsRightLayout.addWidget(self.getTweetsMiddleBox, 20)
+            #################Middle Box Settings#################
+            self.getTweetsMiddleRightLayout.addWidget(self.userLineEdit)
+            self.getTweetsMiddleRightLayout.addWidget(self.userSelected)
+            self.getTweetsMiddleRightLayout.addWidget(self.noUserSelected)
+            self.getTweetsMiddleBox.setLayout(self.getTweetsMiddleRightLayout)
+            self.getTweetsRightLayout.addWidget(self.getTweetsMiddleBox, 20)
 
-        self.getTweetsMiddleRightLayout_2.addWidget(self.searchOptionLabel)
-        self.getTweetsMiddleRightLayout_2.addWidget(self.searchOptionMenu)
-        self.getTweetsMiddleBox_2.setLayout(self.getTweetsMiddleRightLayout_2)
-        self.getTweetsRightLayout.addWidget(self.getTweetsMiddleBox_2, 20)
+            self.getTweetsMiddleRightLayout_2.addWidget(self.searchOptionLabel)
+            self.getTweetsMiddleRightLayout_2.addWidget(self.searchOptionMenu)
+            self.getTweetsMiddleBox_2.setLayout(self.getTweetsMiddleRightLayout_2)
+            self.getTweetsRightLayout.addWidget(self.getTweetsMiddleBox_2, 20)
 
-        #################Bottom Box Settings#################
-        self.getTweetsBottomRightLayout.addWidget(self.infoGetTweets)
-        self.getTweetsBottomBox.setLayout(self.getTweetsBottomRightLayout)
-        self.getTweetsRightLayout.addWidget(self.getTweetsBottomBox, 40)
+            #################Bottom Box Settings#################
+            self.getTweetsBottomRightLayout.addWidget(self.infoGetTweets)
+            self.getTweetsBottomBox.setLayout(self.getTweetsBottomRightLayout)
+            self.getTweetsRightLayout.addWidget(self.getTweetsBottomBox, 40)
 
         #################Set Layouts#################
         self.getTweetsMainLayout.addLayout(self.getTweetsLeftLayout, 70)
-        self.getTweetsMainLayout.addLayout(self.getTweetsRightLayout, 30)
+        if not top_tweet_keyword:
+            self.getTweetsMainLayout.addLayout(self.getTweetsRightLayout, 30)
         self.tabGetTweets.setLayout(self.getTweetsMainLayout)
 
     def topTweetWindow(self):
@@ -458,6 +473,8 @@ class Main(QMainWindow):
         for i, v in enumerate(col_names):
             self.tableTopTweet.setHorizontalHeaderItem(i, QTableWidgetItem(v))
         self.tableTopTweet.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        self.tableTopTweet.doubleClicked.connect(self.get_top_10_tweets)
 
         # Align left for Table Widget and auto stretching
         self.tableTopTweet.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
@@ -741,6 +758,11 @@ class Main(QMainWindow):
                     else:
                         self.tableTopTweet.setItem(row, column,
                                                QTableWidgetItem(str(value)))
+
+    def get_top_10_tweets(self):
+        trend_keyword = self.tableTopTweet.item(self.tableTopTweet.currentRow(), 0).text()
+        self.getTweetsWindow(trend_keyword)
+        self.get_tweets_func()
 
     def authWindow(self):
         if os.path.exists(os.path.join(os.getenv('HOME'), '.twi_auth',
