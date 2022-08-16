@@ -683,9 +683,9 @@ class Main(QMainWindow):
                                                     f"{second_results[8]}")
                 self.secondPersonBestRtTweet.setWordWrap(True)
 
-        else:
-            QMessageBox.information(self, "Info", "Names fields should not be"
-            " empty")
+            else:
+                QMessageBox.information(self, "Info", "Names fields should not be"
+                " empty")
 
     def get_tweets_func(self):
         twitter_api = self.check_credentials()
