@@ -358,6 +358,7 @@ class Main(QMainWindow):
         self.tableTweets.verticalHeader().setDefaultSectionSize(150)
 
         self.tableTweets.setAlternatingRowColors(True)
+        self.tableTweets.horizontalHeader().setFixedHeight(25)
 
         #################Right Layout Widgets#################
         #################Top Widgets#################
@@ -483,6 +484,8 @@ class Main(QMainWindow):
         # Align left for Table Widget and auto stretching
         self.tableTopTweet.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
         self.tableTopTweet.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        self.tableTopTweet.horizontalHeader().setFixedHeight(25)
 
         #################Right Layout Widgets#################
         #################Right Top Layout Widgets#################
