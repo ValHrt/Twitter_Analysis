@@ -32,7 +32,11 @@ simple_tweet_module = "This module allow you to tweet from this application.\
  if you want it to.\n\nIssues: If your tweet contains more than 280 characters\
  you won't be able to post your tweet and get an error window."
 
-top_tweets_module = "To be defined later / Top Tweets Module"
+top_tweets_module = "This module allow you to get trending tweets from a\
+ selected location.\n\n You can choose trending tweets or trending hastags.\
+ \n\nDouble click on a trend will show you the top 10 tweets related to that\
+ trend.\n\nYou can choose a country for the location, to do this, just select\
+ the country and then in the city list choose also the country name."
 
 authentification_module = "This module is used to save your twitter dev\
  account credentials.\n\nImportant: You need to have a developer account\
