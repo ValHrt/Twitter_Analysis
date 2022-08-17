@@ -1,3 +1,5 @@
+#################Box styles#################
+
 def BoxStyleTop():
     return """
         QGroupBox{
@@ -40,6 +42,9 @@ def BoxStyleBottom():
         border-radius:15px;
         }
     """
+
+
+#################Button styles#################
 
 def SearchButton():
     return """
@@ -85,12 +90,36 @@ def SubmitButton():
         }
     """
 
+
+#################Label styles#################
+
 def InfosLabelGetTweet():
     return """
         QLabel{
         padding-top:1em;
+        font-family: Cochin;
+        font-size: 14pt;
         }
     """
+
+def WelcomeLabelDescription():
+    return """
+        QLabel{
+        font-family: Cochin;
+        font-size: 15pt;
+        }
+    """
+
+def TitleLabelWindow():
+    return """
+        QLabel{
+        font-family: Cochin;
+        font-size: 20pt;
+        }
+    """
+
+
+#################Radio button style#################
 
 def RadioButtonCompare():
     return """

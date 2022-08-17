@@ -109,10 +109,10 @@ class Main(QMainWindow):
         #################Welcome Screen Widgets#################
         self.titleWelcLabel = QLabel("Welcome to the Twitter Toolbox Dev App")
         self.titleWelcLabel.setAlignment(Qt.AlignCenter)
-        # TODO : mettre le style CSS dans le bon fichier
         self.titleWelcLabel.setStyleSheet("font-size: 45pt;font-family: Cochin")
         self.welcText = QLabel("Select in the list widget below"
                                " to get information about the selected module.")
+        self.welcText.setStyleSheet("font-family: Cochin; font-size: 20pt")
         self.welcText.setAlignment(Qt.AlignCenter)
         self.welcimg = QPixmap(resource_path('icons/down-arrow.png'))
         self.welcImage = QLabel()
@@ -148,13 +148,13 @@ class Main(QMainWindow):
         self.moduleLabel = QLabel(modules_text.compare_module)
         self.moduleLabel.setWordWrap(True)
         self.moduleLabel.setAlignment(Qt.AlignCenter)
+        self.moduleLabel.setStyleSheet(style.WelcomeLabelDescription())
 
         #################Main Layout Widgets#################
         self.welcMainLayout.addWidget(self.titleWelcLabel)
         self.welcMainLayout.addWidget(self.welcText)
         self.welcMainLayout.addWidget(self.welcImage)
         self.welcMainLayout.addWidget(self.welcComboWidget)
-        # self.welcMainLayout.addWidget(self.copyrightLabel)
 
         #################Subs Layout Widgets#################
         self.welcLeftSubLayout.addWidget(self.moduleImage)

@@ -43,6 +43,7 @@ class SimpleTweetWindow(QWidget):
         #################Top Layout Widgets#################
         if not self.reply:
             self.titleText = QLabel("Simple Tweet")
+            self.titleText.setStyleSheet(style.TitleLabelWindow())
             self.simpleTweetImg = QLabel()
             self.img = QPixmap(resource_path('icons/plume.png'))
             self.img = self.img.scaled(250, 250)
@@ -169,6 +170,7 @@ class TweetBotWindow(QWidget):
     def widgets(self):
         #################Top Layout Widgets#################
         self.titleText = QLabel("Tweet Bot")
+        self.titleText.setStyleSheet(style.TitleLabelWindow())
         self.titleText.setAlignment(Qt.AlignCenter)
         self.tweetBotImg = QLabel()
         self.img = QPixmap(resource_path('icons/robot.png'))
