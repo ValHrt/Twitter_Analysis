@@ -1,7 +1,7 @@
 # Twitter Developer Toolbox
 
 This application has been designed to use the Twitter API with a GUI.
-Image de l'application
+![twitterapp](/readme_img/Twitter_App)
 
 ## Connection to the Twitter API
 
