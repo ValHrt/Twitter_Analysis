@@ -20,6 +20,7 @@ To apply to a twitter dev account you need to go on the [Twitter Developer porta
 ## Comparison module
 
 This module allows you to compare two Twitter accounts to see who has the best statistics.
+
 -To do this enter the two people to be compared.
 
 -You can enter additional parameters, including the number of tweets to be considered (maximum 150) and wheter or not the search includes replies.
