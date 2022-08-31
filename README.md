@@ -25,7 +25,7 @@ This module allows you to compare two Twitter accounts to see who has the best s
 
 - **Issues**: It is possible that the search does not find a nickname that exists on Twitter. This is the case if the person has not tweeted enough (*e.g.: search on 50 tweets and the person has only tweeted 5 times*) or if he is in private mode.
 
-- Additional info: It may take several seconds to run the search, especially if you are searching on a large number of tweets.
+- **Additional info**: It may take several seconds to run the search, especially if you are searching on a large number of tweets.
 
 ![comparisonmodule](/readme_img/Comparison_Module.png)
 
