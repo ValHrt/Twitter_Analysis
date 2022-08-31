@@ -21,6 +21,7 @@ To apply to a twitter dev account you need to go on the [Twitter Developer porta
 
 This module allows you to compare two Twitter accounts to see who has the best statistics.
 -To do this enter the two people to be compared.
+
 -You can enter additional parameters, including the number of tweets to be considered (maximum 150) and wheter or not the search includes replies.
 
 - **Issues**: It is possible that the search does not find a nickname that exists on Twitter. This is the case if the person has not tweeted enough (*e.g.: search on 50 tweets and the person has only tweeted 5 times*) or if he is in private mode.
@@ -32,6 +33,7 @@ This module allows you to compare two Twitter accounts to see who has the best s
 ## Get Tweets module
 
 This module allows you to search tweets by keyword, by user or both.
+
 -There are several search options which are explained in the bottom right window.
 
 - **Issues**: It is possible that the search does not return anything. Make sure you have unchecked the 'Select User' option if you have not entered a user name (*or check that the user name is correct*). If this option is unchecked but the search does not return anything, it means that no tweet in the last 30 days contains this keyword.
